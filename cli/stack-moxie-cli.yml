@@ -1,0 +1,31 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/run-crank/cli
+name: crank
+description: >-
+  Crank is Stack Moxie's open-source, no-code BDD test-automation CLI for
+  integrated enterprise SaaS. It scaffolds, runs, and independently executes
+  "Cogs" - gRPC services that each expose steps and assertions for a specific
+  platform (Salesforce, Marketo, Pardot, Eloqua, OpenAI, web, inbox, etc).
+binary: crank
+repository: https://github.com/run-crank/cli
+docs: https://crank.run
+install:
+  - method: script
+    command: curl -s https://get.crank.run/install.sh | sh
+commands:
+  - name: crank run FILE
+    group: run
+    description: Execute one or more scenario files (YAML BDD scenarios).
+  - name: crank cog:install [COGNAME]
+    group: cog
+    description: Install a Cog (a gRPC plugin) for a given platform.
+  - name: crank cog:steps COGNAME
+    group: cog
+    description: Interactively run the steps a Cog exposes.
+  - name: crank cog:scaffold
+    group: cog
+    description: Generate boilerplate for authoring a new Cog.
+  - name: crank registry:steps
+    group: registry
+    description: List all available steps across installed Cogs.

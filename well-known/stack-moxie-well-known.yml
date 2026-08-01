@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: searched
+source: live probe of /.well-known/ on stackmoxie.com hosts
+note: >-
+  No /.well-known/ discovery documents are published on any Stack Moxie host.
+  All probes returned 404. This is valid, recorded absence - Stack Moxie exposes
+  no public API and therefore no OIDC/OAuth/api-catalog discovery surface.
+hosts:
+  - host: https://stackmoxie.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://www.stackmoxie.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://app.stackmoxie.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}

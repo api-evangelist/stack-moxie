@@ -1,0 +1,25 @@
+# Stack Moxie
+
+> Stack Moxie is a revenue-observability platform that provides testing and monitoring for AI, marketing, and RevOps stacks. It watches your revenue stack end-to-end, catches outages, bugs, and email-deliverability issues across integrated SaaS platforms before they become incidents, and QAs campaign launches. Stack Moxie exposes no public REST API; its developer surface is the open-source Crank CLI and its gRPC "Cog" plugin ecosystem.
+
+## Product
+- [Stack Moxie](https://stackmoxie.com/): Revenue observability - monitoring and testing for AI, marketing, and RevOps.
+- [App / Sign in](https://app.stackmoxie.com): Web application and free account creation.
+- [Pricing](https://www.stackmoxie.com/pricing/): Starter (free) through Enterprise, priced by monthly test runs.
+
+## Developer / Open Source
+- [Crank](https://crank.run): Open-source, no-code BDD test suite for integrated enterprise SaaS.
+- [Crank CLI (GitHub)](https://github.com/run-crank/cli): The `crank` command-line runner (TypeScript). Install: `curl -s https://get.crank.run/install.sh | sh`.
+- [run-crank GitHub org](https://github.com/run-crank): Crank CLI plus 20+ platform "Cogs" (Salesforce, Marketo, Pardot, Eloqua, OpenAI, web, inbox, and more).
+- [Cog gRPC service definition](grpc/stack-moxie-cog.proto): The proto3 `CogService` interface every Cog implements.
+
+## Docs & Support
+- [Help Docs](https://app.stackmoxie.com/docs): Product help center.
+- [Support](https://www.stackmoxie.com/support/): Support and contact.
+- [Blog](https://www.stackmoxie.com/blog/): RevOps, observability, and deliverability writing.
+- [App & API Status](https://www.stackmoxie.com/app-status/): Live status page.
+
+## Security & Legal
+- [Security](https://www.stackmoxie.com/security/): SOC 2 Type II, ISO 27001, bug-bounty program, recurring pen tests.
+- [Privacy Policy](https://www.stackmoxie.com/privacypolicy/)
+- [Terms](https://app.stackmoxie.com/docs/terms)

@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: https://crank.run
+note: >-
+  Stack Moxie publishes no client SDK for a hosted REST API (it exposes no public
+  API). Its first-party open-source distribution is the Crank CLI (a BDD test
+  runner for integrated SaaS) and its ecosystem of gRPC "Cog" plugins, plus a
+  VS Code authoring extension. These are developer tools, not API client SDKs,
+  so no `SDKs` pointer is emitted.
+packages:
+  - language: shell
+    registry: install-script
+    name: crank
+    url: https://crank.run
+    install: curl -s https://get.crank.run/install.sh | sh
+    source: https://github.com/run-crank/cli
+    official: true
+    description: Crank CLI - BDD test automation for integrated enterprise SaaS.
+  - language: typescript
+    registry: vscode-marketplace
+    name: vscode-crank-scenario-language
+    url: https://github.com/run-crank/vscode-crank-scenario-language
+    source: https://github.com/run-crank/vscode-crank-scenario-language
+    official: true
+    description: VS Code extension for authoring and running Crank scenario files.

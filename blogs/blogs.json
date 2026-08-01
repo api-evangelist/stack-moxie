@@ -1,0 +1,28 @@
+{
+  "repo": "stack-moxie",
+  "feeds": [
+    {
+      "source": "https://www.stackmoxie.com/feed/",
+      "feed_url": "https://www.stackmoxie.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://www.stackmoxie.com/support/",
+      "feed_url": "https://www.stackmoxie.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
+      "source": "https://www.stackmoxie.com/blog/",
+      "feed_url": "https://www.stackmoxie.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-08-01T15:49:00Z"
+}

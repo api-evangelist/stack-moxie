@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: searched
+source: https://www.stackmoxie.com/app-status/
+status_page: https://www.stackmoxie.com/app-status/
+note: >-
+  Stack Moxie operates a public App & API status page. It publishes no formal
+  versioning or deprecation policy for a hosted API (it exposes none); the Crank
+  CLI is versioned with SemVer git tags (see changelog/).
+versioning:
+  scheme: semver
+  current: v0.11.1
+  docs: https://github.com/run-crank/cli/releases
+deprecation:
+  policy_url: null
+  sunset_header: false

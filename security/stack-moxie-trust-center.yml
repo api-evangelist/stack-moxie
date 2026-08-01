@@ -1,0 +1,17 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+source: https://www.stackmoxie.com/security/
+url: https://www.stackmoxie.com/security/
+certifications:
+- SOC 2 Type II
+- ISO 27001
+detail: >-
+  SOC 2 Type II audit completed; ISO 27001 and SOC 2 Type II inherited via Azure
+  hosting. Third-party penetration-test certificates available on request.
+evidence:
+- source: https://www.stackmoxie.com/security/
+  keywords:
+  - soc 2
+  - soc2
+  - iso 27001

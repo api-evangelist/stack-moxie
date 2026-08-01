@@ -1,7 +1,26 @@
 aid: stack-moxie
 name: Stack Moxie
-description: Stack Moxie is a company surfaced as a portfolio company of techstars and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Stack Moxie is a revenue-observability platform that provides continuous
+  testing and monitoring for AI, marketing, and RevOps technology stacks. It
+  watches integrated SaaS platforms end-to-end, catches outages, broken
+  automations, and email-deliverability issues before they become revenue
+  incidents, and QAs campaign launches so teams ship error-free. Stack Moxie
+  exposes no public REST API; its developer surface is the open-source Crank
+  CLI - a no-code BDD test runner - and its ecosystem of gRPC "Cog" plugins for
+  Salesforce, Marketo, Pardot, Eloqua, OpenAI, web, inbox, and more.
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://stackmoxie.com/favicon.ico
 url: https://raw.githubusercontent.com/api-evangelist/stack-moxie/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,15 +30,77 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- RevOps
+- Marketing Operations
+- Observability
+- Monitoring
+- Testing
+- Test Automation
+- SaaS
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis: []
 common:
 - type: Website
   url: https://stackmoxie.com/
+- type: DeveloperPortal
+  url: https://crank.run
+- type: Documentation
+  url: https://app.stackmoxie.com/docs
+- type: GettingStarted
+  url: https://crank.run
+- type: Support
+  url: https://www.stackmoxie.com/support/
+- type: Blog
+  url: https://www.stackmoxie.com/blog/
+- type: BlogRSS
+  url: https://www.stackmoxie.com/blog/feed/
+- type: Pricing
+  url: https://www.stackmoxie.com/pricing/
+- type: SignUp
+  url: https://app.stackmoxie.com
+- type: Login
+  url: https://app.stackmoxie.com/login
+- type: TermsOfService
+  url: https://app.stackmoxie.com/docs/terms
+- type: PrivacyPolicy
+  url: https://www.stackmoxie.com/privacypolicy/
+- type: GitHubOrganization
+  url: https://github.com/run-crank
+- type: StatusPage
+  url: https://www.stackmoxie.com/app-status/
+- type: CLI
+  url: cli/stack-moxie-cli.yml
+- type: Protobuf
+  url: grpc/stack-moxie-cog.proto
+- type: Packages
+  url: packages/stack-moxie-packages.yml
+- type: ChangeLog
+  url: changelog/stack-moxie-changelog.yml
+- type: Lifecycle
+  url: lifecycle/stack-moxie-lifecycle.yml
+- type: LLMsTxt
+  url: llms/stack-moxie-llms.txt
+- type: WellKnown
+  url: well-known/stack-moxie-well-known.yml
+- type: Compliance
+  url: https://www.stackmoxie.com/security/
+- type: Security
+  url: https://www.stackmoxie.com/security/
+- type: TrustCenter
+  url: security/stack-moxie-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/stack-moxie-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/stack-moxie-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 10
+  pass: local-v1
