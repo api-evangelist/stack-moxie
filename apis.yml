@@ -5,32 +5,41 @@ description: >-
   testing and monitoring for AI, marketing, and RevOps technology stacks. It
   watches integrated SaaS platforms end-to-end, catches outages, broken
   automations, and email-deliverability issues before they become revenue
-  incidents, and QAs campaign launches so teams ship error-free. Stack Moxie
-  exposes no public REST API; its developer surface is the open-source Crank
-  CLI - a no-code BDD test runner - and its ecosystem of gRPC "Cog" plugins for
-  Salesforce, Marketo, Pardot, Eloqua, OpenAI, web, inbox, and more.
+  incidents, and QAs campaign launches so teams ship error-free. It ships two
+  developer surfaces: a hosted REST API (OpenAPI 3.0.1, 43 operations, JWT bearer
+  auth, base https://app.stackmoxie.com/api/) for creating, running, scheduling
+  and monitoring test Scenarios programmatically; and the open-source Crank CLI -
+  a no-code BDD test runner - with its ecosystem of gRPC "Cog" plugins for
+  Salesforce, Marketo, Pardot, Eloqua, HubSpot, Dynamics, OpenAI, web, inbox,
+  DNS and more.
 accessModel:
-  pricing: unknown
-  onboarding: unknown
-  trial: false
-  try_now: false
-  public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  pricing: public
+  onboarding: self-service
+  trial: true
+  try_now: true
+  public: true
+  label: Public
+  confidence: high
+  source:
+  - https://www.stackmoxie.com/pricing/
+  - https://api.stackmoxie.com/
+  generated: '2026-08-14'
+  method: searched
+  note: >-
+    Free-for-life Starter tier (25 runs/month) with self-service signup at
+    app.stackmoxie.com; published price list; publicly readable API reference.
+    Growth and Enterprise tiers require a sales conversation.
 image: https://stackmoxie.com/favicon.ico
 url: https://raw.githubusercontent.com/api-evangelist/stack-moxie/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - techstars
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: published-openapi-harvested
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-14'
 tags:
 - Company
 - RevOps
@@ -39,14 +48,82 @@ tags:
 - Monitoring
 - Testing
 - Test Automation
+- QA Automation
+- Marketing Automation
+- Email Deliverability
+- Salesforce
+- Marketo
+- gRPC
 - SaaS
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
-apis: []
+apis:
+- name: Stack Moxie REST API
+  description: >-
+    The hosted Stack Moxie REST API. Create, read, update and delete test
+    Scenarios; run them synchronously or asynchronously and read their outcomes
+    and logs; schedule recurring runs; manage Connections (stored credentials for
+    Salesforce, Marketo, Pardot, Eloqua, Dynamics and HubSpot via Cogs); read the
+    Cog registry; and administer Organizations, members and notification groups.
+    OpenAPI 3.0.1, 25 paths, 43 operations, 17 schemas. All operations are
+    authenticated with an account-issued JWT bearer token and scoped to an
+    Organization UUID in the path.
+  humanURL: https://api.stackmoxie.com/
+  baseURL: https://app.stackmoxie.com/api/
+  tags:
+  - Testing
+  - QA Automation
+  - Monitoring
+  - RevOps
+  properties:
+  - type: OpenAPI
+    url: openapi/stack-moxie-rest-api-openapi.yml
+  - type: APIReference
+    url: https://api.stackmoxie.com/
+  - type: Overlay
+    url: overlays/stack-moxie-rest-api-overlay.yaml
+  - type: Authentication
+    url: authentication/stack-moxie-authentication.yml
+  - type: ErrorCatalog
+    url: errors/stack-moxie-problem-types.yml
+  - type: Conventions
+    url: conventions/stack-moxie-conventions.yml
+  - type: DataModel
+    url: data-model/stack-moxie-data-model.yml
+  - type: RateLimits
+    url: rate-limits/stack-moxie-rate-limits.yml
 common:
+- type: AgenticAccess
+  url: agentic-access/stack-moxie-agentic-access.yml
+- type: Authentication
+  url: authentication/stack-moxie-authentication.yml
+- type: APIReference
+  url: https://api.stackmoxie.com/
+- type: OpenAPI
+  url: openapi/stack-moxie-rest-api-openapi.yml
+- type: Overlay
+  url: overlays/stack-moxie-rest-api-overlay.yaml
+- type: ErrorCatalog
+  url: errors/stack-moxie-problem-types.yml
+- type: ErrorCodes
+  url: errors/stack-moxie-outcome-codes.yml
+- type: Conventions
+  url: conventions/stack-moxie-conventions.yml
+- type: DataModel
+  url: data-model/stack-moxie-data-model.yml
+- type: Conformance
+  url: conformance/stack-moxie-conformance.yml
+- type: RateLimits
+  url: rate-limits/stack-moxie-rate-limits.yml
+- type: Plans
+  url: plans/stack-moxie-plans-pricing.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: SDKs
+  url: packages/stack-moxie-packages.yml
 - type: Website
   url: https://stackmoxie.com/
 - type: DeveloperPortal
@@ -87,8 +164,6 @@ common:
   url: lifecycle/stack-moxie-lifecycle.yml
 - type: LLMsTxt
   url: llms/stack-moxie-llms.txt
-- type: WellKnown
-  url: well-known/stack-moxie-well-known.yml
 - type: Compliance
   url: https://www.stackmoxie.com/security/
 - type: Security
@@ -100,7 +175,16 @@ common:
 - type: DomainSecurity
   url: security/stack-moxie-domain-security.yml
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-14'
   status: enriched
-  artifacts_added: 10
+  artifacts_added: 17
   pass: local-v1
+  note: >-
+    Contract discovery corrected a wrong prior conclusion. The 2026-07-21 pass
+    recorded that Stack Moxie "exposes no public REST API" after conventional spec
+    paths 404d. GET https://api.stackmoxie.com/ in fact returns 200 with a
+    server-rendered ReDoc page whose __redoc_state carries a complete OpenAPI 3.0.1
+    document (25 paths, 43 operations, 17 schemas), saved verbatim to
+    openapi/_original/. Every artifact asserting "no API" was rewritten. Ownership
+    verified: info.title "Stack Moxie REST API", servers
+    https://app.stackmoxie.com/api/, signup link app.stackmoxie.com.
