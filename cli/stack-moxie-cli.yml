@@ -1,31 +1,137 @@
-generated: '2026-07-21'
+generated: '2026-08-14'
 method: searched
-source: https://github.com/run-crank/cli
+source: https://github.com/run-crank/cli/blob/master/README.md
 name: crank
+version: 0.11.1
+version_released: '2020-06-23'
 description: >-
   Crank is Stack Moxie's open-source, no-code BDD test-automation CLI for
-  integrated enterprise SaaS. It scaffolds, runs, and independently executes
-  "Cogs" - gRPC services that each expose steps and assertions for a specific
-  platform (Salesforce, Marketo, Pardot, Eloqua, OpenAI, web, inbox, etc).
+  integrated enterprise SaaS. Technically it is a gRPC client that installs,
+  authenticates, and drives "Cogs" - gRPC services (shipped as Docker images) that
+  each expose steps and assertions for one platform (Salesforce, Marketo, Pardot,
+  Eloqua, HubSpot, Dynamics, Iterable, ON24, SalesLoft, Outreach, DNS, web
+  browser, inbox, and more). Scenarios are plain YAML `*.crank.yml` files written
+  in an easy-to-read BDD style so business users and developers can share them.
 binary: crank
+license: MIT
+language: typescript
+framework: oclif
 repository: https://github.com/run-crank/cli
 docs: https://crank.run
+getting_started: https://crank.run/intro
+cog_directory: https://crank.run/discover-cogs
+scenario_file_pattern: "*.crank.yml"
 install:
-  - method: script
-    command: curl -s https://get.crank.run/install.sh | sh
+- method: script
+  command: curl -s https://get.crank.run/install.sh | sh
+  platforms: [darwin, linux]
+  note: >-
+    Installs an oclif tarball from get.crank.run; requires /usr/local/bin on PATH
+    and sudo. Not distributed through npm, Homebrew, apt or any package registry.
+self_update:
+  command: crank update [CHANNEL]
+  provided_by: "@oclif/plugin-update"
+requires:
+- Docker (Cogs are pulled and run as containers)
 commands:
-  - name: crank run FILE
-    group: run
-    description: Execute one or more scenario files (YAML BDD scenarios).
-  - name: crank cog:install [COGNAME]
-    group: cog
-    description: Install a Cog (a gRPC plugin) for a given platform.
-  - name: crank cog:steps COGNAME
-    group: cog
-    description: Interactively run the steps a Cog exposes.
-  - name: crank cog:scaffold
-    group: cog
-    description: Generate boilerplate for authoring a new Cog.
-  - name: crank registry:steps
-    group: registry
-    description: List all available steps across installed Cogs.
+- name: crank run FILE
+  group: run
+  description: Run a .crank.yml scenario file or a folder of scenario files.
+  flags:
+  - {flag: "-s, --use-ssl", description: use SSL between crank and all Cogs}
+  - {flag: "-t, --token", description: "set contextual token values; repeatable"}
+  - {flag: "--debug", description: verbose diagnostic output}
+  examples:
+  - crank run /path/to/scenario.crank.yml
+  - crank run --use-ssl /path/to/scenario-folder
+  - crank run scenario.crank.yml --token utmSource=Email -t "utmCampaign=Test Campaign"
+- name: crank cog:install [COGNAME]
+  group: cog
+  description: >-
+    Install a Cog on this machine, by name:version (e.g. org-name/cog-name:1.0.0).
+    Defaults to --source=docker.
+  flags:
+  - {flag: "-f, --force", description: install over a preexisting installation of the same name}
+  - {flag: "--source", description: "docker (default) or local"}
+  - {flag: "--local-start-command", description: command to start a locally developed Cog}
+  - {flag: "--ignore-auth", description: suppress prompts for Cog auth details}
+  - {flag: "--debug"}
+- name: crank cog:auth COGNAME
+  group: cog
+  description: >-
+    (Re-)Authenticate an installed Cog - prompts for the auth_fields the Cog
+    declares in its CogManifest and stores them for later runs.
+- name: crank cog:uninstall COGNAME
+  group: cog
+  description: Remove an installed Cog from this machine.
+- name: crank cog:step COGNAME
+  group: cog
+  description: Run a single Cog step interactively.
+  flags:
+  - {flag: "--step", description: the stepId of the step to run}
+  - {flag: "-s, --use-ssl"}
+  - {flag: "--debug"}
+- name: crank cog:steps COGNAME
+  group: cog
+  description: Run multiple Cog steps interactively.
+  flags:
+  - {flag: "-s, --use-ssl"}
+  - {flag: "--debug"}
+- name: crank cog:scaffold
+  group: cog
+  description: Generate boilerplate code for a new Cog in a language of your choice.
+  flags:
+  - {flag: "--language", description: "typescript"}
+  - {flag: "--name", description: friendly human name of the Cog}
+  - {flag: "--org", description: "your org name (docker hub or github)"}
+  - {flag: "-o, --output-directory"}
+  - {flag: "--[no-]include-example-step"}
+  - {flag: "--[no-]include-mit-license"}
+  - {flag: "--copyright-owner"}
+- name: crank cog:meta
+  group: cog
+  description: >-
+    Print a Cog's manifest metadata (src/commands/cog/meta.ts). Not documented in
+    the generated README command list.
+  undocumented: true
+- name: crank cog:readme [COGNAME]
+  group: cog
+  description: >-
+    Inject generated authentication and step documentation into a Cog's README.md
+    at the <!-- authenticationDetails --> and <!-- stepDetails --> markers.
+- name: crank registry:cogs
+  group: registry
+  description: List the Cogs currently installed on this machine (table output, csv-able).
+- name: crank registry:steps
+  group: registry
+  description: List every step available across all installed Cogs.
+- name: crank registry:rebuild [COGNAME]
+  group: registry
+  description: >-
+    Rebuild the local Cog/step registry (src/commands/registry/rebuild.ts).
+    Present in the source tree; no usage block in the generated README.
+  undocumented: true
+- name: crank update [CHANNEL]
+  group: core
+  description: Update the crank CLI itself.
+- name: crank help [COMMAND]
+  group: core
+  description: Display help for crank.
+flows:
+- name: Install and run a first scenario
+  steps:
+  - curl -s https://get.crank.run/install.sh | sh
+  - "crank cog:install automatoninc/web"
+  - "crank run ./scenario.crank.yml"
+- name: Author a new Cog
+  steps:
+  - "crank cog:scaffold --language=typescript --org=myorg --name='My System'"
+  - implement GetManifest / RunStep / RunSteps against grpc/stack-moxie-cog.proto
+  - "crank cog:install --source=local --local-start-command='npm start'"
+  - "crank cog:step myorg/my-system-cog"
+  - "crank cog:readme myorg/my-system-cog"
+currency_note: >-
+  The command surface above is read from the master branch, but the last tagged
+  release is v0.11.1 (2020-06-23) and the README's code links point at the v0.11.1
+  tag. Two commands present in the source tree (cog:meta, registry:rebuild) never
+  made it into the generated command documentation.

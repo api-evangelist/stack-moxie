@@ -1,22 +1,36 @@
-generated: '2026-07-21'
+generated: '2026-08-14'
 method: searched
 source: https://github.com/run-crank/cli/releases
 scheme: semver
 note: >-
-  Stack Moxie publishes no changelog for a hosted API (it has none). This
-  captures the release history of its first-party open-source Crank CLI, tagged
-  on GitHub. Recent window only.
+  Stack Moxie publishes no product changelog and no API changelog (it has no API).
+  This captures the release history of its first-party open-source Crank CLI,
+  tagged on GitHub. The tag list is unchanged since the 2026-07-21 pass and since
+  2020: v0.11.1 remains the newest release, six years old, though the repository
+  received commits until 2023-03-04. Cog repositories under the same org are still
+  being committed to (through 2025) but publish no release notes and no new
+  version tags.
 current_version: v0.11.1
+current_version_date: '2020-06-23'
+release_notes_url: https://github.com/run-crank/cli/releases
 entries:
-  - version: v0.11.1
-    date: '2020-06-23'
-  - version: v0.11.0
-    date: '2020-06-19'
-  - version: v0.10.2
-    date: '2020-06-05'
-  - version: v0.10.1
-    date: '2020-06-05'
-  - version: v0.10.0
-    date: '2020-04-28'
-  - version: v0.9.2
-    date: '2020-04-28'
+- version: v0.11.1
+  date: '2020-06-23'
+- version: v0.11.0
+  date: '2020-06-19'
+- version: v0.10.2
+  date: '2020-06-05'
+- version: v0.10.1
+  date: '2020-06-05'
+- version: v0.10.0
+  date: '2020-04-28'
+- version: v0.9.2
+  date: '2020-04-28'
+- version: v0.9.1
+  date: '2020-04-28'
+- version: v0.9.0
+  date: '2020-02-03'
+gaps:
+- no changelog for the hosted Stack Moxie product
+- no release notes body captured; GitHub releases carry titles only
+- no per-Cog changelog; Cog images ship untagged dev-* builds

@@ -1,0 +1,193 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/stack-moxie-rest-api-openapi.yml
+secondary_source: grpc/stack-moxie-cog.proto
+note: >-
+  Two entity graphs, one product. The REST graph below is derived from the OpenAPI
+  component schemas and their $ref/id-reference fields; the gRPC graph is the
+  message tree of automaton.cog. They meet at the Cog: a REST `Connection.cog` and
+  `RegistryEntry` are the hosted projections of the gRPC `CogManifest`, and a REST
+  `Steps[].stepId` is a gRPC `StepDefinition.step_id`.
+rest:
+  base_url: https://app.stackmoxie.com/api/
+  root: Organization
+  identifier_convention: >-
+    Every persisted entity carries BOTH a numeric `id` and a string `uuid`;
+    `{org}` path parameters are declared format uuid. Relationship fields are
+    typed `oneOf: [integer, <object>]` - the same field yields a bare id or a
+    populated object depending on the `populate` query parameter.
+  timestamps: >-
+    createdAt/updatedAt are unix millisecond values, typed inconsistently across
+    schemas (string on Scenario/NotificationGroup, integer on Schedule/Job).
+  entities:
+  - name: Organization
+    path: /v1/organizations
+    description: The tenant. Every other resource is nested beneath one.
+    relationships:
+    - {kind: has_many, target: OrganizationMember, via: 'GET /v1/organizations/{org}/members'}
+    - {kind: has_many, target: Scenario, via: 'GET /v1/organizations/{org}/scenarios'}
+    - {kind: has_many, target: Connection, via: 'GET /v1/organizations/{org}/connections'}
+    - {kind: has_many, target: Folder, via: 'GET /v1/organizations/{org}/folders'}
+    - {kind: has_many, target: Schedule, via: 'GET /v1/organizations/{org}/schedules'}
+    - {kind: has_many, target: NotificationGroup, via: 'GET /v1/organizations/{org}/notification-groups'}
+    - {kind: has_many, target: RegistryEntry, via: 'GET /v1/organizations/{org}/registry'}
+  - name: OrganizationMember
+    description: A User's membership of an Organization, with invite lifecycle.
+    relationships:
+    - {kind: belongs_to, target: Organization, via: org path}
+    - {kind: has_one, target: User}
+  - name: User
+    description: A person. Appears as a NotificationGroup member and as a Scenario's createdBy/lastUpdatedBy.
+  - name: Scenario
+    description: A stored test definition - the central object of the product.
+    fields: [name, description, definition, type, severity, dashboardSetting, feature, schedule, notificationGroups, instructions, exposedToApis, isLinkable, uuid, id, createdAt, updatedAt, createdBy, lastUpdatedBy]
+    relationships:
+    - {kind: belongs_to, target: Organization, via: org path}
+    - {kind: has_one, target: ScenarioDefinition, via: definition}
+    - {kind: has_many, target: Run, via: 'GET /v1/organizations/{org}/scenarios/{id}/runs'}
+    - {kind: has_one, target: Schedule, via: schedule}
+    - {kind: has_many, target: NotificationGroup, via: notificationGroups}
+    - {kind: has_one, target: User, via: createdBy}
+    - {kind: has_one, target: User, via: lastUpdatedBy}
+    note: >-
+      `exposedToApis` and `isLinkable` are flags governing whether a Scenario can
+      be reused as a template (see the allTemplates / linkableTemplates /
+      exposedTemplates list operations).
+  - name: ScenarioDefinition
+    description: The executable body of a Scenario.
+    fields: [scenario, description, steps, linkedScenarios]
+    required: [steps]
+    relationships:
+    - {kind: has_many, target: Steps, via: steps}
+    - {kind: has_one, target: LinkedScenarios, via: linkedScenarios}
+  - name: Steps
+    description: >-
+      An ordered array of step invocations. Each item requires `cog` and `stepId`
+      and may carry `data`, `waitFor` (seconds to wait before executing) and
+      `failAfter` (seconds to keep retrying before failing the run).
+    relationships:
+    - {kind: belongs_to, target: RegistryEntry, via: cog}
+    - {kind: belongs_to, target: StepDefinition (gRPC), via: stepId}
+  - name: LinkedScenarios
+    description: Scenarios that should run based on the outcome of this Scenario.
+    relationships:
+    - {kind: has_many, target: LinkedScenarioOutcome}
+  - name: LinkedScenarioOutcome
+    description: One outcome-to-Scenario binding within LinkedScenarios.
+  - name: Run
+    description: A single execution of a Scenario.
+    fields: [outcome, duration, scenario, id, uuid, log, createdAt]
+    enums:
+      outcome: [Created, Running, Passed, Failed, Error, Waiting]
+    relationships:
+    - {kind: belongs_to, target: Scenario, via: scenario}
+    - {kind: has_one, target: RunLog, via: log}
+    note: duration is milliseconds; a failed assertion is still HTTP 200
+  - name: RunLog
+    description: The detailed log of a Run, fetched per run.
+    relationships:
+    - {kind: belongs_to, target: Run, via: log}
+  - name: Job
+    description: The status of an asynchronously submitted Scenario.
+    fields: [jobId, status, type, data, id, createdAt, updatedAt]
+    enums:
+      status: [Processing, Complete, Failed]
+      type: [Scenario]
+    note: >-
+      `data` is a JSON *string* that must be parsed a second time. There is no
+      callback - poll GET /v1/organizations/{org}/job/{jobId}.
+  - name: Connection
+    description: Stored credentials linking this Organization to one third-party platform via a Cog.
+    fields: [cog, auth, profile, isValid, id, uuid]
+    required: [cog]
+    enums:
+      cog: [automatoninc/dynamics, automatoninc/eloqua, stackmoxie/hubspot, automatoninc/marketo, automatoninc/pardot, automatoninc/salesforce]
+      profile: [default]
+    relationships:
+    - {kind: belongs_to, target: Organization, via: org path}
+    - {kind: belongs_to, target: RegistryEntry, via: cog}
+    note: >-
+      `auth` is writeOnly - credentials can be set but never read back; `isValid`
+      is the only readable signal that they still work. Unique per cog+profile
+      (a duplicate POST returns 409).
+  - name: RegistryEntry
+    description: A Cog as the hosted platform sees it - the REST projection of CogManifest.
+    fields: [name, label, version, homepage, authHelpUrl, stepDefinitionsList, authFieldsList]
+    relationships:
+    - {kind: has_many, target: Steps, via: stepDefinitionsList}
+  - name: Folder
+    description: Organizational container for Scenarios.
+    relationships:
+    - {kind: belongs_to, target: Organization, via: org path}
+  - name: Schedule
+    description: An interval on which a Scenario runs automatically.
+    fields: [interval, scheduledModel, scheduledScenario, id, uuid, createdAt]
+    required: [interval, scheduledModel, scheduledScenario]
+    enums:
+      scheduledModel: [scenario]
+    relationships:
+    - {kind: has_one, target: Scenario, via: scheduledScenario}
+    note: interval is seconds; only Scenarios can currently be scheduled
+  - name: NotificationGroup
+    description: A named group notified during a Scenario run.
+    fields: [name, email, members, id, uuid, createdAt, updatedAt]
+    required: [name]
+    relationships:
+    - {kind: has_many, target: User, via: members}
+    note: >-
+      Delivery is to an email alias and to member users - there is no subscriber
+      URL, so this is not a webhook surface.
+  - name: Error
+    description: 'The error envelope: { name, message }. Not RFC 9457.'
+grpc:
+  root: CogManifest
+  source: grpc/stack-moxie-cog.proto
+  entities:
+  - name: CogManifest
+    fields: [name, label, version, homepage, auth_help_url]
+    relationships:
+    - {kind: has_many, target: StepDefinition, via: step_definitions}
+    - {kind: has_many, target: FieldDefinition, via: auth_fields}
+    rest_projection: RegistryEntry
+  - name: StepDefinition
+    fields: [step_id, name, help, type, expression]
+    enums:
+      type: [ACTION, VALIDATION]
+    relationships:
+    - {kind: has_many, target: FieldDefinition, via: expected_fields}
+    - {kind: has_many, target: RecordDefinition, via: expected_records}
+  - name: FieldDefinition
+    fields: [key, optionality, type, description]
+    enums:
+      optionality: [OPTIONAL, REQUIRED]
+      type: [ANYSCALAR, STRING, BOOLEAN, NUMERIC, DATE, DATETIME, EMAIL, PHONE, URL, ANYNONSCALAR, MAP]
+    note: >-
+      `key` is the gRPC metadata key the credential travels under; the hosted
+      equivalent is a key inside Connection.auth.
+  - name: RecordDefinition
+    enums:
+      type: [KEYVALUE, TABLE, BINARY]
+  - name: RunStepRequest
+    fields: [request_id, scenario_id, requestor_id]
+    relationships:
+    - {kind: has_one, target: Step, via: step}
+  - name: Step
+    fields: [step_id, data]
+    relationships:
+    - {kind: belongs_to, target: StepDefinition, via: step_id}
+  - name: RunStepResponse
+    fields: [outcome, message_format, message_args, response_data]
+    enums:
+      outcome: [PASSED, FAILED, ERROR]
+    relationships:
+    - {kind: has_many, target: StepRecord, via: records}
+    rest_projection: Run.outcome (wider enum, adds Created/Running/Waiting)
+  - name: StepRecord
+    fields: [id, name]
+    relationships:
+    - {kind: has_one, target: TableRecord, via: 'table (oneof value)'}
+    - {kind: has_one, target: BinaryRecord, via: 'binary (oneof value)'}
+  - name: TableRecord
+  - name: BinaryRecord
+  - name: ManifestRequest
+render: null

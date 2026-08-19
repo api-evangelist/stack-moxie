@@ -1,0 +1,137 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/stack-moxie-rest-api-openapi.yml
+docs: https://api.stackmoxie.com/
+format: custom
+format_note: >-
+  NOT RFC 9457. Errors are returned as application/json with the two-field Error
+  schema { name, message } - no `type` URI, no `title`, no `status` in the body, no
+  `instance`, no problem+json media type, and no machine-readable error code. `name`
+  is an unconstrained string with no enumerated values anywhere in the spec, so a
+  client cannot branch on a specific failure without string-matching a message.
+envelope:
+  media_type: application/json
+  schema: '#/components/schemas/Error'
+  fields:
+  - {field: name, type: string, description: error name; values are not enumerated}
+  - {field: message, type: string, description: human-readable message}
+coverage:
+  operations: 43
+  with_401: 43
+  with_403: 43
+  with_422: 4
+  with_400: 3
+  with_404: 1
+  with_409: 1
+  note: >-
+    401 and 403 are declared on every operation via shared component responses.
+    Beyond those, only 9 of 43 operations declare any failure case at all - no
+    operation declares a 5xx, and only one declares a 404, so a client cannot tell
+    from the contract what a GET on a missing Scenario, Folder, Schedule, Run or
+    Member returns.
+problems:
+- status: 401
+  name: Unauthorized
+  title: Problem with your API token
+  detail: Returned when there may be a problem with your API token.
+  schema: '#/components/schemas/Error'
+  scope: all 43 operations (shared component response)
+  remediation: >-
+    Reissue the JWT from the account settings page at https://app.stackmoxie.com;
+    the API has no token or refresh endpoint.
+  source: 'openapi/stack-moxie-rest-api-openapi.yml#/components/responses/Unauthorized'
+- status: 403
+  name: Forbidden
+  title: Action not permitted for this user
+  detail: Returned if the authenticated user isn't allowed to perform this action.
+  schema: '#/components/schemas/Error'
+  scope: all 43 operations (shared component response)
+  remediation: >-
+    The token is valid but the user lacks rights in this Organization. Check
+    membership and role via GET /v1/organizations/{org}/members/{id}. There are no
+    OAuth scopes to widen - authorization is organization membership and role.
+  source: 'openapi/stack-moxie-rest-api-openapi.yml#/components/responses/Forbidden'
+- status: 422
+  name: MalformedScenarioDefinition
+  title: Scenario definition is malformed
+  detail: Returned if the provided scenario definition is malformed.
+  remediation: >-
+    Validate the `definition` object against the ScenarioDefinition schema - it
+    requires `steps`, and each step requires `cog` and `stepId`. Cog names must
+    exist in GET /v1/organizations/{org}/registry.
+  source_operations:
+  - 'POST /v1/organizations/{org}/scenarios'
+  - 'PATCH /v1/organizations/{org}/scenarios/{id}'
+- status: 422
+  name: AuthFieldsMismatch
+  title: Connection auth details do not match the Cog's required fields
+  detail: >-
+    Returned when the details provided on the `auth` key do not match the fields
+    required to create a Connection for the given Cog.
+  remediation: >-
+    Read the target Cog's authFieldsList from GET
+    /v1/organizations/{org}/registry and supply exactly those keys in the
+    write-only `auth` object.
+  source_operations:
+  - 'POST /v1/organizations/{org}/connections'
+  - 'PATCH /v1/organizations/{org}/connections/{id}'
+- status: 409
+  name: ConnectionAlreadyExists
+  title: A Connection for this Cog already exists
+  detail: Returned when a connection for this cog already exists for this org/profile.
+  remediation: >-
+    PATCH the existing Connection instead of creating a second one; a Cog and
+    profile pair is unique per Organization (profile is currently always "default").
+  source_operations:
+  - 'POST /v1/organizations/{org}/connections'
+- status: 404
+  name: UnknownCog
+  title: Unknown Cog
+  detail: Returned when the given `cog` is unknown.
+  remediation: >-
+    Use a value from the Connection.cog enum or from the live registry - the spec
+    enumerates automatoninc/dynamics, automatoninc/eloqua, stackmoxie/hubspot,
+    automatoninc/marketo, automatoninc/pardot and automatoninc/salesforce.
+  source_operations:
+  - 'POST /v1/organizations/{org}/connections'
+- status: 400
+  name: AsyncRequirementsNotMet
+  title: Scenario definition does not meet async requirements
+  detail: Returned if the provided scenario definition does not match async requirements.
+  remediation: >-
+    The async endpoint accepts a narrower definition than the synchronous one; the
+    spec does not state which constraints apply, so this must be resolved against
+    the provider's docs or by trial.
+  source_operations:
+  - 'POST /v1/organizations/{org}/asyncScenario'
+  gap: the differing requirements are not documented
+- status: 400
+  name: InvalidNotifyValue
+  title: Invalid notify value
+  detail: Returns when notify value is invalid.
+  remediation: >-
+    Supply a notify value that resolves to an existing Notification Group for this
+    Organization (GET /v1/organizations/{org}/notification-groups).
+  source_operations:
+  - 'POST /v1/organizations/{org}/scenarios/{id}/runs'
+- status: 400
+  name: InvalidAction
+  title: User has already activated
+  detail: "Invalid Action: can't re-send an invitation to a User who has already activated."
+  remediation: >-
+    Check the member's state with GET /v1/organizations/{org}/members/{id} before
+    calling reinvite.
+  source_operations:
+  - 'POST /v1/organizations/{org}/members/{id}/reinvite'
+related:
+  grpc_outcomes: errors/stack-moxie-outcome-codes.yml
+  note: >-
+    Do not confuse an HTTP error with a test result. A Scenario Run that fails its
+    assertions still returns HTTP 200; the finding is in Run.outcome
+    (Created | Running | Passed | Failed | Error | Waiting).
+gaps:
+- no error-code registry and no enumerated `name` values
+- no 5xx declared on any operation
+- 404 declared on only one operation, though most are addressed by id
+- no RFC 9457 problem+json, no type URIs, no documentation links per error
+- no retry or backoff guidance, and no 429 anywhere

@@ -1,29 +1,97 @@
-generated: '2026-07-21'
-method: searched
-source: live probe of /.well-known/ on stackmoxie.com hosts
+generated: '2026-08-14'
+method: probed
+source: live probe of /.well-known/ on every Stack Moxie and Crank host
 note: >-
-  No /.well-known/ discovery documents are published on any Stack Moxie host.
-  All probes returned 404. This is valid, recorded absence - Stack Moxie exposes
-  no public API and therefore no OIDC/OAuth/api-catalog discovery surface.
+  No /.well-known/ discovery document is published on any Stack Moxie or Crank
+  host. Every path on every host returned HTTP 404 - re-probed 2026-08-14 and
+  unchanged from the 2026-07-21 pass. Stack Moxie DOES publish a REST API (see
+  openapi/), but advertises no /.well-known/ discovery surface for it: no
+  api-catalog, no OAuth/OIDC metadata (the API authenticates with an opaque
+  account-issued JWT and has no authorization server), no agent card, no
+  ai-plugin. Because nothing returned a document, this file
+  carries NO WellKnown or SecurityTxt pointer in apis.yml - the pointer would
+  assert a surface the provider does not serve. The stale WellKnown pointer from
+  the previous pass has been removed for that reason.
+result: all-404
+documents_found: 0
 hosts:
-  - host: https://stackmoxie.com
-    documents:
-      - {path: /.well-known/security.txt, status: 404}
-      - {path: /.well-known/openid-configuration, status: 404}
-      - {path: /.well-known/oauth-authorization-server, status: 404}
-      - {path: /.well-known/api-catalog, status: 404}
-      - {path: /.well-known/ai-plugin.json, status: 404}
-  - host: https://www.stackmoxie.com
-    documents:
-      - {path: /.well-known/security.txt, status: 404}
-      - {path: /.well-known/openid-configuration, status: 404}
-      - {path: /.well-known/oauth-authorization-server, status: 404}
-      - {path: /.well-known/api-catalog, status: 404}
-      - {path: /.well-known/ai-plugin.json, status: 404}
-  - host: https://app.stackmoxie.com
-    documents:
-      - {path: /.well-known/security.txt, status: 404}
-      - {path: /.well-known/openid-configuration, status: 404}
-      - {path: /.well-known/oauth-authorization-server, status: 404}
-      - {path: /.well-known/api-catalog, status: 404}
-      - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://stackmoxie.com
+  server: WordPress (404 returns an HTML error page)
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://www.stackmoxie.com
+  server: WordPress (404 returns an HTML error page)
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://app.stackmoxie.com
+  server: application host (404 returns text/plain "Not Found")
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api.stackmoxie.com
+  server: resolves and answers, but 404s every path (text/plain "Not Found")
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://crank.run
+  server: Gatsby static site (404 returns an HTML error page)
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+contract_discovery:
+  note: >-
+    Full STEP 0b contract discovery was run on the same hosts on 2026-08-14. The
+    conventional spec paths all 404, BUT the contract was found: GET
+    https://api.stackmoxie.com/ returns HTTP 200 with a server-rendered ReDoc page
+    titled "Stack Moxie REST API" whose __redoc_state carries the complete OpenAPI
+    3.0.1 document inline (25 paths, 43 operations, 17 schemas). There is no raw
+    spec URL - the document exists only embedded in that HTML page. The 2026-07-21
+    pass probed only /openapi.json-style paths, saw 404, and wrongly recorded that
+    Stack Moxie has no API. Recorded here so no later pass repeats either mistake.
+  found:
+  - url: https://api.stackmoxie.com/
+    status: 200
+    content_type: text/html
+    finding: ReDoc page with the full OpenAPI 3.0.1 embedded in __redoc_state.spec.data
+    saved_to: openapi/_original/stack-moxie-openapi.json
+  probes:
+  - {url: 'https://stackmoxie.com/openapi.json', status: 404}
+  - {url: 'https://www.stackmoxie.com/openapi.json', status: 404}
+  - {url: 'https://app.stackmoxie.com/openapi.json', status: 404}
+  - {url: 'https://api.stackmoxie.com/openapi.json', status: 404}
+  - {url: 'https://crank.run/openapi.json', status: 404}
+  - {url: 'https://api.stackmoxie.com/swagger.json', status: 404}
+  - {url: 'https://api.stackmoxie.com/api-docs', status: 404}
+  - {url: 'https://app.stackmoxie.com/api-docs', status: 404}
+  - {url: 'https://stackmoxie.com/llms.txt', status: 404}
+  - {url: 'https://app.stackmoxie.com/llms.txt', status: 404}
+  - {url: 'https://crank.run/llms.txt', status: 404}
+  graphql: none advertised on any host
+  mcp: no Model Context Protocol server published by Stack Moxie or the run-crank org
+  a2a: no agent card at either the canonical or the legacy path on any host
+  note_wp_json: >-
+    The marketing site is WordPress and does serve a WordPress REST API at
+    https://www.stackmoxie.com/wp-json/. That is the CMS behind the brochure site,
+    not a Stack Moxie product API, so it is recorded here and deliberately NOT
+    registered as an API entry.

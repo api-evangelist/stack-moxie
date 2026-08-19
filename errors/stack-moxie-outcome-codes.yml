@@ -1,0 +1,87 @@
+generated: '2026-08-14'
+method: derived
+source: grpc/stack-moxie-cog.proto
+format: grpc-outcome-enum
+scope: Cog gRPC contract only
+note: >-
+  This is the error contract of the OPEN-SOURCE Cog gRPC service, not of the hosted
+  REST API - for HTTP errors see errors/stack-moxie-problem-types.yml. It is NOT an
+  rfc9457 catalog and must not be read as one. The contract here is the
+  RunStepResponse.Outcome enum on automaton.cog.CogService: a step result is
+  reported in the response body, not as a transport error, so the gRPC call itself
+  returns OK even when the test fails. There is no numeric error-code registry and
+  no machine-readable failure taxonomy beyond the three outcomes below - failure
+  detail is carried only in a human-readable message_format string.
+envelope:
+  message: automaton.cog.RunStepResponse
+  fields:
+  - field: outcome
+    type: enum Outcome
+    required: true
+    description: the machine-readable result of the step
+  - field: message_format
+    type: string
+    description: >-
+      human-readable result message with printf-style placeholders; the only place
+      failure detail is expressed
+  - field: message_args
+    type: repeated google.protobuf.Value
+    description: values interpolated into message_format
+  - field: records
+    type: repeated StepRecord
+    description: >-
+      structured evidence attached to the result (KEYVALUE, TABLE or BINARY)
+  - field: response_data
+    type: google.protobuf.Struct
+    description: free-form structured data returned by the step
+problems:
+- code: PASSED
+  numeric: 0
+  status: success
+  title: Step completed successfully
+  meaning: The step ran and met expectations.
+  action: continue the scenario
+  source_operation: grpc/stack-moxie-cog.proto#RunStep
+- code: FAILED
+  numeric: 1
+  status: assertion-failure
+  title: Step completed but did not meet expectations
+  meaning: >-
+    The step executed against the system under test without incident, but a
+    VALIDATION-type assertion did not hold - this is a real finding about the
+    customer's stack, not a fault in the Cog.
+  action: >-
+    read message_format/message_args and the attached records to see the observed
+    versus expected values; treat as a test failure, not an infrastructure error
+  source_operation: grpc/stack-moxie-cog.proto#RunStep
+- code: ERROR
+  numeric: 2
+  status: execution-error
+  title: Step could not be completed
+  meaning: >-
+    The step could not run at all - typically bad or expired credentials in the
+    Cog's auth metadata, an unreachable or throttling third-party system, or
+    malformed step data.
+  action: >-
+    check the auth_fields values supplied as gRPC metadata, the availability of the
+    system under test, and the step's input data; retry is not guaranteed safe for
+    ACTION-type steps because the contract defines no idempotency key
+  source_operation: grpc/stack-moxie-cog.proto#RunStep
+transport_errors:
+  note: >-
+    Standard gRPC status codes (UNAVAILABLE, UNAUTHENTICATED, DEADLINE_EXCEEDED,
+    ...) can still surface if the Cog container is not running or the connection
+    fails, but the contract does not enumerate or specialise them.
+hosted_equivalent:
+  note: >-
+    The hosted product exposes the same idea over REST as Run.outcome, with a
+    wider enum: Created | Running | Passed | Failed | Error | Waiting (the extra
+    values cover the lifecycle of a queued run, which the gRPC contract has no
+    concept of). A failed test still returns HTTP 200 - see
+    errors/stack-moxie-problem-types.yml.
+  source: openapi/stack-moxie-rest-api-openapi.yml#/components/schemas/Run
+gaps:
+- no error-code registry; every failure reason is free text in message_format
+- no error type URIs, no documentation links per failure
+- no distinction inside ERROR between auth failure, upstream outage, and bad input
+- no retry-after or backoff guidance

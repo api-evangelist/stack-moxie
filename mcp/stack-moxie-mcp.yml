@@ -1,0 +1,331 @@
+generated: '2026-08-14'
+method: derived
+status: candidate
+source: openapi/stack-moxie-rest-api-openapi.yml
+note: 'Stack Moxie publishes NO MCP server. Searched the docs, the run-crank GitHub org (29 repos),
+  and the MCP registries: nothing. This file is a DERIVED CANDIDATE tool surface - one tool per REST
+  operation, mechanically named - showing what an MCP server over the existing API would look like.
+  It is a design input, not a shipped product. For that reason NO `MCPServer` pointer is wired into
+  apis.yml: the pointer would assert an agent surface the provider does not serve. Each tool would
+  inherit its real inputSchema from the parameters and requestBody of the backing operation in the
+  OpenAPI. No tool-crosswalk artifact is emitted either, because there is no published tool list
+  to cross-walk against.'
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+search_evidence:
+- source: https://api.stackmoxie.com/
+  result: no MCP endpoint referenced in the API reference
+- source: https://github.com/run-crank
+  result: 29 repos, none an MCP server (cog-openai / cog-anthropic / cog-gemini are test Cogs for
+    those vendors' APIs, not MCP servers)
+- source: web search 2026-08-14
+  result: no Stack Moxie or Crank MCP server found
+server: null
+candidate_tool_count: 43
+tools:
+- name: create_organizations
+  description: Create an Organization
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations
+  method: POST
+  path: /v1/organizations
+  tag: 'How To: Administer'
+  mutating: true
+- name: update_organizations
+  description: Update an Organization
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}
+  method: PATCH
+  path: /v1/organizations/{org}
+  tag: 'How To: Administer'
+  mutating: true
+- name: list_organizations_scenarios
+  description: List Scenarios
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios
+  method: GET
+  path: /v1/organizations/{org}/scenarios
+  tag: 'How To: Test'
+  mutating: false
+- name: create_organizations_scenarios
+  description: Create a Scenario
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/scenarios
+  method: POST
+  path: /v1/organizations/{org}/scenarios
+  tag: 'How To: Test'
+  mutating: true
+- name: get_organizations_scenarios
+  description: Get a Scenario
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/{id}
+  method: GET
+  path: /v1/organizations/{org}/scenarios/{id}
+  tag: 'How To: Test'
+  mutating: false
+- name: update_organizations_scenarios
+  description: Update a Scenario
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}/scenarios/{id}
+  method: PATCH
+  path: /v1/organizations/{org}/scenarios/{id}
+  tag: 'How To: Test'
+  mutating: true
+- name: delete_organizations_scenarios
+  description: Delete a Scenario
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#DELETE /v1/organizations/{org}/scenarios/{id}
+  method: DELETE
+  path: /v1/organizations/{org}/scenarios/{id}
+  tag: 'How To: Test'
+  mutating: true
+- name: create_organizations_async_scenario
+  description: Create an Async Scenario
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/asyncScenario
+  method: POST
+  path: /v1/organizations/{org}/asyncScenario
+  tag: 'How To: Test'
+  mutating: true
+- name: get_organizations_job
+  description: Get Async Job Status
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/job/{jobId}
+  method: GET
+  path: /v1/organizations/{org}/job/{jobId}
+  tag: 'How To: Test'
+  mutating: false
+- name: list_organizations_scenarios_all_templates
+  description: List Templates
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/allTemplates
+  method: GET
+  path: /v1/organizations/{org}/scenarios/allTemplates
+  tag: 'How To: Test'
+  mutating: false
+- name: list_organizations_scenarios_linkable_templates
+  description: List Linkable Templates
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/linkableTemplates
+  method: GET
+  path: /v1/organizations/{org}/scenarios/linkableTemplates
+  tag: 'How To: Test'
+  mutating: false
+- name: list_organizations_scenarios_exposed_templates
+  description: List Exposed Templates
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/exposedTemplates
+  method: GET
+  path: /v1/organizations/{org}/scenarios/exposedTemplates
+  tag: 'How To: Test'
+  mutating: false
+- name: list_organizations_members
+  description: List Team Members
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/members
+  method: GET
+  path: /v1/organizations/{org}/members
+  tag: 'How To: Administer'
+  mutating: false
+- name: create_organizations_members
+  description: Invite a Team Member
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/members
+  method: POST
+  path: /v1/organizations/{org}/members
+  tag: 'How To: Administer'
+  mutating: true
+- name: get_organizations_members
+  description: Get a Team Member
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/members/{id}
+  method: GET
+  path: /v1/organizations/{org}/members/{id}
+  tag: 'How To: Administer'
+  mutating: false
+- name: update_organizations_members
+  description: Update a team Member
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}/members/{id}
+  method: PATCH
+  path: /v1/organizations/{org}/members/{id}
+  tag: 'How To: Administer'
+  mutating: true
+- name: delete_organizations_members
+  description: Remove a Team Member
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#DELETE /v1/organizations/{org}/members/{id}
+  method: DELETE
+  path: /v1/organizations/{org}/members/{id}
+  tag: 'How To: Administer'
+  mutating: true
+- name: create_organizations_members_reinvite
+  description: Re-Send Invitation
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/members/{id}/reinvite
+  method: POST
+  path: /v1/organizations/{org}/members/{id}/reinvite
+  tag: 'How To: Administer'
+  mutating: true
+- name: list_organizations_notification-groups
+  description: List Notification Groups
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/notification-groups
+  method: GET
+  path: /v1/organizations/{org}/notification-groups
+  tag: 'How To: Integrate'
+  mutating: false
+- name: create_organizations_notification-groups
+  description: Create a Notification Group
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/notification-groups
+  method: POST
+  path: /v1/organizations/{org}/notification-groups
+  tag: 'How To: Administer'
+  mutating: true
+- name: update_organizations_notification-groups
+  description: Update a Notification Group
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}/notification-groups/{id}
+  method: PATCH
+  path: /v1/organizations/{org}/notification-groups/{id}
+  tag: 'How To: Administer'
+  mutating: true
+- name: delete_organizations_notification-groups
+  description: Delete a Notification Group
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#DELETE /v1/organizations/{org}/notification-groups/{id}
+  method: DELETE
+  path: /v1/organizations/{org}/notification-groups/{id}
+  tag: 'How To: Integrate'
+  mutating: true
+- name: list_organizations_connections
+  description: List Connections
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/connections
+  method: GET
+  path: /v1/organizations/{org}/connections
+  tag: 'How To: Integrate'
+  mutating: false
+- name: create_organizations_connections
+  description: Create a Connection
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/connections
+  method: POST
+  path: /v1/organizations/{org}/connections
+  tag: 'How To: Integrate'
+  mutating: true
+- name: get_organizations_connections
+  description: Get a Connection
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/connections/{id}
+  method: GET
+  path: /v1/organizations/{org}/connections/{id}
+  tag: 'How To: Integrate'
+  mutating: false
+- name: update_organizations_connections
+  description: Update a Connection
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}/connections/{id}
+  method: PATCH
+  path: /v1/organizations/{org}/connections/{id}
+  tag: 'How To: Integrate'
+  mutating: true
+- name: delete_organizations_connections
+  description: Delete a Connection
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#DELETE /v1/organizations/{org}/connections/{id}
+  method: DELETE
+  path: /v1/organizations/{org}/connections/{id}
+  tag: 'How To: Integrate'
+  mutating: true
+- name: list_organizations_registry
+  description: Get the Cog Registry
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/registry
+  method: GET
+  path: /v1/organizations/{org}/registry
+  tag: 'How To: Integrate'
+  mutating: false
+- name: list_organizations_folders
+  description: List Folders
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/folders
+  method: GET
+  path: /v1/organizations/{org}/folders
+  tag: 'How To: Organize'
+  mutating: false
+- name: create_organizations_folders
+  description: Create a Folder
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/folders
+  method: POST
+  path: /v1/organizations/{org}/folders
+  tag: 'How To: Organize'
+  mutating: true
+- name: get_organizations_folders
+  description: Get a Folder
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/folders/{id}
+  method: GET
+  path: /v1/organizations/{org}/folders/{id}
+  tag: 'How To: Organize'
+  mutating: false
+- name: update_organizations_folders
+  description: Update a Folder
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}/folders/{id}
+  method: PATCH
+  path: /v1/organizations/{org}/folders/{id}
+  tag: 'How To: Organize'
+  mutating: true
+- name: delete_organizations_folders
+  description: Delete a Folder
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#DELETE /v1/organizations/{org}/folders/{id}
+  method: DELETE
+  path: /v1/organizations/{org}/folders/{id}
+  tag: 'How To: Organize'
+  mutating: true
+- name: list_organizations_schedules
+  description: List Schedules
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/schedules
+  method: GET
+  path: /v1/organizations/{org}/schedules
+  tag: 'How To: Automate'
+  mutating: false
+- name: create_organizations_schedules
+  description: Create a Schedule
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/schedules
+  method: POST
+  path: /v1/organizations/{org}/schedules
+  tag: 'How To: Automate'
+  mutating: true
+- name: get_organizations_schedules
+  description: Get a Schedule
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/schedules/{id}
+  method: GET
+  path: /v1/organizations/{org}/schedules/{id}
+  tag: 'How To: Automate'
+  mutating: false
+- name: update_organizations_schedules
+  description: Update a Schedule
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#PATCH /v1/organizations/{org}/schedules/{id}
+  method: PATCH
+  path: /v1/organizations/{org}/schedules/{id}
+  tag: 'How To: Automate'
+  mutating: true
+- name: delete_organizations_schedules
+  description: Delete a Schedule
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#DELETE /v1/organizations/{org}/schedules/{id}
+  method: DELETE
+  path: /v1/organizations/{org}/schedules/{id}
+  tag: 'How To: Automate'
+  mutating: true
+- name: get_organizations_scenarios_runs
+  description: List Scenario Runs
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/{id}/runs
+  method: GET
+  path: /v1/organizations/{org}/scenarios/{id}/runs
+  tag: 'How To: Test'
+  mutating: false
+- name: create_organizations_scenarios_runs
+  description: Create a Scenario Run
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#POST /v1/organizations/{org}/scenarios/{id}/runs
+  method: POST
+  path: /v1/organizations/{org}/scenarios/{id}/runs
+  tag: 'How To: Test'
+  mutating: true
+- name: get_organizations_scenarios_runs_2
+  description: Get a Scenario Run
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/{scenarioId}/runs/{id}
+  method: GET
+  path: /v1/organizations/{org}/scenarios/{scenarioId}/runs/{id}
+  tag: 'How To: Test'
+  mutating: false
+- name: list_organizations_scenarios_most_recent_run
+  description: Get a Scenario's Most Recent Run
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/{scenarioId}/mostRecentRun
+  method: GET
+  path: /v1/organizations/{org}/scenarios/{scenarioId}/mostRecentRun
+  tag: 'How To: Test'
+  mutating: false
+- name: get_organizations_scenarios_runs_log
+  description: Get a Scenario Run Log
+  source_operation: openapi/stack-moxie-rest-api-openapi.yml#GET /v1/organizations/{org}/scenarios/{scenarioId}/runs/{runId}/log/{id}
+  method: GET
+  path: /v1/organizations/{org}/scenarios/{scenarioId}/runs/{runId}/log/{id}
+  tag: 'How To: Test'
+  mutating: false

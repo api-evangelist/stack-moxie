@@ -1,0 +1,256 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Stack Moxie REST API
+  version: 1.0.0
+extends: openapi/stack-moxie-rest-api-openapi.yml
+x-generated: '2026-08-14'
+x-method: generated
+x-note: Captures API Evangelist enhancements only. The harvested document at openapi/_original/stack-moxie-openapi.json
+  is never mutated.
+actions:
+- target: $.info
+  description: Record the document version and the canonical reference URL; the published spec carries
+    no info.version, so consumers cannot pin the contract.
+  update:
+    version: 1.0.0-undeclared
+    x-apievangelist-version-note: info.version is absent from the published document; this placeholder
+      is API Evangelist's, not the provider's.
+    contact:
+      name: Stack Moxie Support
+      url: https://www.stackmoxie.com/support/
+    x-apievangelist-reference: https://api.stackmoxie.com/
+    x-apievangelist-source: embedded __redoc_state on https://api.stackmoxie.com/
+- target: $.servers
+  description: Server block is correct as published (https://app.stackmoxie.com/api/); recorded here for
+    provenance only.
+  update:
+  - url: https://app.stackmoxie.com/api/
+    description: Production
+- target: $.paths['/v1/organizations'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizations
+- target: $.paths['/v1/organizations/{org}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrg
+- target: $.paths['/v1/organizations/{org}/scenarios'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgScenarios
+- target: $.paths['/v1/organizations/{org}/scenarios'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgScenarios
+- target: $.paths['/v1/organizations/{org}/scenarios/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgScenariosById
+- target: $.paths['/v1/organizations/{org}/scenarios/{id}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrgScenariosById
+- target: $.paths['/v1/organizations/{org}/scenarios/{id}'].delete
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: deleteOrganizationsByOrgScenariosById
+- target: $.paths['/v1/organizations/{org}/asyncScenario'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgAsyncscenario
+- target: $.paths['/v1/organizations/{org}/job/{jobId}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgJobByJobid
+- target: $.paths['/v1/organizations/{org}/scenarios/allTemplates'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgScenariosAlltemplates
+- target: $.paths['/v1/organizations/{org}/scenarios/linkableTemplates'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgScenariosLinkabletemplates
+- target: $.paths['/v1/organizations/{org}/scenarios/exposedTemplates'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgScenariosExposedtemplates
+- target: $.paths['/v1/organizations/{org}/members'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgMembers
+- target: $.paths['/v1/organizations/{org}/members'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgMembers
+- target: $.paths['/v1/organizations/{org}/members/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgMembersById
+- target: $.paths['/v1/organizations/{org}/members/{id}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrgMembersById
+- target: $.paths['/v1/organizations/{org}/members/{id}'].delete
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: deleteOrganizationsByOrgMembersById
+- target: $.paths['/v1/organizations/{org}/members/{id}/reinvite'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgMembersByIdReinvite
+- target: $.paths['/v1/organizations/{org}/notification-groups'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgNotificationGroups
+- target: $.paths['/v1/organizations/{org}/notification-groups'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgNotificationGroups
+- target: $.paths['/v1/organizations/{org}/notification-groups/{id}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrgNotificationGroupsById
+- target: $.paths['/v1/organizations/{org}/notification-groups/{id}'].delete
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: deleteOrganizationsByOrgNotificationGroupsById
+- target: $.paths['/v1/organizations/{org}/connections'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgConnections
+- target: $.paths['/v1/organizations/{org}/connections'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgConnections
+- target: $.paths['/v1/organizations/{org}/connections/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgConnectionsById
+- target: $.paths['/v1/organizations/{org}/connections/{id}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrgConnectionsById
+- target: $.paths['/v1/organizations/{org}/connections/{id}'].delete
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: deleteOrganizationsByOrgConnectionsById
+- target: $.paths['/v1/organizations/{org}/registry'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgRegistry
+- target: $.paths['/v1/organizations/{org}/folders'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgFolders
+- target: $.paths['/v1/organizations/{org}/folders'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgFolders
+- target: $.paths['/v1/organizations/{org}/folders/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgFoldersById
+- target: $.paths['/v1/organizations/{org}/folders/{id}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrgFoldersById
+- target: $.paths['/v1/organizations/{org}/folders/{id}'].delete
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: deleteOrganizationsByOrgFoldersById
+- target: $.paths['/v1/organizations/{org}/schedules'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgSchedules
+- target: $.paths['/v1/organizations/{org}/schedules'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgSchedules
+- target: $.paths['/v1/organizations/{org}/schedules/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgSchedulesById
+- target: $.paths['/v1/organizations/{org}/schedules/{id}'].patch
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: updateOrganizationsByOrgSchedulesById
+- target: $.paths['/v1/organizations/{org}/schedules/{id}'].delete
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: deleteOrganizationsByOrgSchedulesById
+- target: $.paths['/v1/organizations/{org}/scenarios/{id}/runs'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgScenariosByIdRuns
+- target: $.paths['/v1/organizations/{org}/scenarios/{id}/runs'].post
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: createOrganizationsByOrgScenariosByIdRuns
+- target: $.paths['/v1/organizations/{org}/scenarios/{scenarioId}/runs/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgScenariosByScenarioidRunsById
+- target: $.paths['/v1/organizations/{org}/scenarios/{scenarioId}/mostRecentRun'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: listOrganizationsByOrgScenariosByScenarioidMostrecentrun
+- target: $.paths['/v1/organizations/{org}/scenarios/{scenarioId}/runs/{runId}/log/{id}'].get
+  description: Add a unique operationId; the published spec declares none, which blocks SDK generation,
+    Arazzo workflows and tool binding.
+  update:
+    operationId: getOrganizationsByOrgScenariosByScenarioidRunsByRunidLogById
+- target: $.components.parameters.OutcomeQueryParam
+  description: The published parameter is typed integer but its own example passes the string values Passed,Failed.
+    Corrected to string in our overlay; reported as a defect to the provider.
+  update:
+    schema:
+      type: string
+    x-apievangelist-defect: published type is integer; documented example uses comma-delimited strings
+- target: $.components.schemas.Error
+  description: Flag that the error envelope is not RFC 9457 and that `name` has no enumerated values.
+  update:
+    x-apievangelist-error-format: custom
+    x-apievangelist-note: Not RFC 9457. No type URI, no status in body, no enumerated `name` values -
+      clients must string-match.

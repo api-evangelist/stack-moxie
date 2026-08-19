@@ -1,0 +1,52 @@
+generated: '2026-08-14'
+method: searched
+source: https://api.stackmoxie.com/
+docs: https://api.stackmoxie.com/
+note: >-
+  Stack Moxie publishes a REST API (43 operations, OpenAPI 3.0.1) but documents NO
+  rate limits for it. The spec declares no 429 response on any operation, defines
+  no RateLimit-*, X-RateLimit-* or Retry-After header, and the rendered reference
+  at api.stackmoxie.com contains no occurrence of "rate limit", "throttle", "429"
+  or "Retry-After". An agent therefore has no runtime signal telling it when to
+  back off - it will discover any limit only as an undeclared failure. This is a
+  measured absence, not an unchecked field.
+limit_count: 0
+limits: []
+headers: []
+exhaustion_status: null
+real_constraint:
+  kind: metered entitlement, not a request throttle
+  unit: run
+  definition: >-
+    One activity executed in Stack Moxie - a test, a list import, or a spreadsheet
+    trigger. POST /v1/organizations/{org}/scenarios/{id}/runs and POST
+    /v1/organizations/{org}/asyncScenario consume runs.
+  source: plans/stack-moxie-plans-pricing.yml
+  values:
+    Starter: 25 runs/month
+    Individual: 100 runs/month
+    Growth: 500 runs/month
+    Enterprise: 500 runs/month
+  overage: USD 2.00 per additional run, discounted 10-50% by bundle and tier
+  exhaustion_behaviour: >-
+    Not documented. The API declares no response for an exhausted run quota, so
+    the behaviour on the 26th run of a Starter account is unspecified in the
+    contract.
+grpc_surface:
+  note: >-
+    The open-source Crank CLI talks gRPC to locally-run Cog containers, which the
+    user hosts; there is no Stack Moxie-imposed limit there. Any throttling met is
+    the third-party SaaS under test (Salesforce, Marketo, ...) and surfaces only as
+    a RunStepResponse with outcome ERROR.
+evidence:
+- url: https://api.stackmoxie.com/
+  status: 200
+  finding: >-
+    full API reference rendered; zero mentions of rate limiting, 429, throttling or
+    Retry-After
+- url: openapi/stack-moxie-rest-api-openapi.yml
+  status: parsed
+  finding: no 429 response and no rate-limit header defined across 43 operations
+- url: https://www.stackmoxie.com/pricing/
+  status: 200
+  finding: monthly run quotas and overage pricing published in place of rate limits

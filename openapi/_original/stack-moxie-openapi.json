@@ -1,0 +1,3009 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Stack Moxie is a QA Automation platform for Marketing, Sales, and Enterprise\nBusiness technologists.\n\nThis REST API can be used by developers like you to further automate, extend,\nand integrate quality into the workflows that matter most to you.\n\nDon't have an account? [Sign up here](https://app.stackmoxie.com).\n\n# Authentication\n\nThe Stack Moxie REST API uses HTTP Bearer Authentication, in the form of a\nJWT token, across all endpoints for authentication. You can manage your API\ntokens on your account settings page.\n\n<SecurityDefinitions />\n",
+    "title": "Stack Moxie REST API",
+    "x-logo": {
+      "url": "https://app.stackmoxie.com/api/logo.png",
+      "altText\"": "Stack Moxie Logo"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://app.stackmoxie.com/api/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "How To: Integrate",
+      "description": "Use these calls to connect an Organization with Marketing/Sales technologies supported by Stack Moxie.\n"
+    },
+    {
+      "name": "How To: Test",
+      "description": "Use these calls to define test Scenarios, Run them, and retrieve their results.\n"
+    },
+    {
+      "name": "How To: Automate",
+      "description": "Use these calls to Schedule Scenario runs.\n"
+    },
+    {
+      "name": "How To: Organize",
+      "description": "Use these calls to organize your test Scenarios into Folders.\n"
+    },
+    {
+      "name": "How To: Administer",
+      "description": "Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically grant them (or your own team members) access.\n"
+    }
+  ],
+  "paths": {
+    "/v1/organizations": {
+      "post": {
+        "summary": "Create an Organization",
+        "description": "Creates an Organization under which Credentials, Scenarios, Schedules, and Runs can be created. The user making the call becomes the admin member of this organization.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Organization"
+              }
+            }
+          }
+        },
+        "tags": [
+          "How To: Administer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Organization just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Returned if the currently authenticated user has exceeded the maximum number of trial organizations.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}": {
+      "patch": {
+        "summary": "Update an Organization",
+        "description": "Updates a given Organization and its details.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The Organization's name."
+                  },
+                  "statusPageIsPublic": {
+                    "type": "boolean",
+                    "description": "Whether or not the Organization's status dashboard can be viewed by unauthenticated users."
+                  },
+                  "notificationEmailAddress": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email address (most likely a group alias) where Run notifcations should be sent for Scheduled runs."
+                  },
+                  "notificationSetting": {
+                    "type": "string",
+                    "enum": [
+                      "never",
+                      "change",
+                      "every fail",
+                      "every error",
+                      "every run"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the updated Organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios": {
+      "get": {
+        "summary": "List Scenarios",
+        "description": "Retrieve the list of test Scenarios for the given Organization.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's test Scenarios.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Scenario"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Scenario",
+        "description": "Creates a test Scenario for the given Organization.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the test Scenario just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scenario"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "description": "Returned if the provided scenario definition is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/{id}": {
+      "get": {
+        "summary": "Get a Scenario",
+        "description": "Retrieves an individual test Scenario by ID.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the test Scenario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scenario"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a Scenario",
+        "description": "Updates an individual test Scenario by ID.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated test Scenario.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scenario"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "description": "Returned if the provided scenario definition is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Scenario",
+        "description": "Deletes an individual test scenario by ID.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Scenario successfully deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/asyncScenario": {
+      "post": {
+        "summary": "Create an Async Scenario",
+        "description": "Creates a Scenario Asynchronously.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns an async job.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jobId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if the provided scenario definition does not match async requirements.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/job/{jobId}": {
+      "get": {
+        "summary": "Get Async Job Status",
+        "description": "Retrieves the status of an async job, including the created scenario if finished.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "This Job's UUID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the job status, including the created scenario if finished.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/allTemplates": {
+      "get": {
+        "summary": "List Templates",
+        "description": "Retrieve the list of all Template Scenarios for the given Organization.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's Template Scenarios.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Scenario"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/linkableTemplates": {
+      "get": {
+        "summary": "List Linkable Templates",
+        "description": "Retrieve the list of all Linkable Template Scenarios for the given Organization.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's Linkable Template Scenarios.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Scenario"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/exposedTemplates": {
+      "get": {
+        "summary": "List Exposed Templates",
+        "description": "Retrieve the list of all Template Scenarios that are exposed to external APIs.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of all Template Scenarios that are exposed to external APIs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Scenario"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/members": {
+      "get": {
+        "summary": "List Team Members",
+        "description": "Retrieves the list of team members who have access to the given Organization.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of team members in this Organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationMember"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Invite a Team Member",
+        "description": "Invites a given person to join the Organization.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "org-admin",
+                      "org-creator"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the team membership just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationMember"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/members/{id}": {
+      "get": {
+        "summary": "Get a Team Member",
+        "description": "Retrieves an individual team membership by ID.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric team membership ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the team membership.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationMember"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a team Member",
+        "description": "Updates an individual team membership by ID.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric team membership ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationMember"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated team membership.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationMember"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a Team Member",
+        "description": "Removes the team member from the organization.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric team membership ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Team member was successfully removed."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/members/{id}/reinvite": {
+      "post": {
+        "summary": "Re-Send Invitation",
+        "description": "Re-sends the invitation to the given team member.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric team membership ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitation successfully re-sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Action: can't re-send an invitation to a User who has already activated.\n",
+            "content": {}
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/notification-groups": {
+      "get": {
+        "summary": "List Notification Groups",
+        "description": "Retrieves a list of Notification Groups that the Organization has set up.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's Notification Groups.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotificationGroup"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Notification Group",
+        "description": "Creates a Notification Group.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationGroup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Notification Group just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationGroup"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/notification-groups/{id}": {
+      "patch": {
+        "summary": "Update a Notification Group",
+        "description": "Updates a Notification Group.\n",
+        "tags": [
+          "How To: Administer"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Notification Group's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationGroup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Notification Group just updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationGroup"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Notification Group",
+        "description": "Removes a Notification Group given its ID.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Notification Group's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Notification Group successfully removed."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/connections": {
+      "get": {
+        "summary": "List Connections",
+        "description": "Retrieves a list of Connections that the Organization has configured with other platforms.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's Connections.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Connection"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Connection",
+        "description": "Integrates Stack Moxie with another platform given a set of authentication details.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Connection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Connection just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Returned when the given `cog` is unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Returned when a connection for this cog already exists for this org/profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returned when the details provided on the `auth` key do not match the fields required to connect the given `cog`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/connections/{id}": {
+      "get": {
+        "summary": "Get a Connection",
+        "description": "Retrieves a single Connection given its ID.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Connection's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Connection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a Connection",
+        "description": "Replaces a single Connection's authentication details given its ID.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Connection's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "auth": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the replaced Connection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "description": "Returned when the details provided on the `auth` key do not match the fields required to connect the given `cog`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Connection",
+        "description": "Removes a Connection given its ID.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Connection's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Connection successfully removed."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/registry": {
+      "get": {
+        "summary": "Get the Cog Registry",
+        "description": "Retrieves a list of Crank Cog Registry entries corresponding to those the Organization has access to use.\n",
+        "tags": [
+          "How To: Integrate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of Crank Cog Registry entries for the Organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegistryEntry"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/folders": {
+      "get": {
+        "summary": "List Folders",
+        "description": "Retrieves a list of this Organization's Folders.\n",
+        "tags": [
+          "How To: Organize"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's Folders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Folder"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Folder",
+        "description": "Creates a Folder.\n",
+        "tags": [
+          "How To: Organize"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Folder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Folder just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/folders/{id}": {
+      "get": {
+        "summary": "Get a Folder",
+        "description": "Retrieves an individual Folder by ID.\n",
+        "tags": [
+          "How To: Organize"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Folder's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Folder.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a Folder",
+        "description": "Updates an individual Folder by ID.\n",
+        "tags": [
+          "How To: Organize"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Folder's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Folder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Folder.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Folder",
+        "tags": [
+          "How To: Organize"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Folder's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Folder successfully deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/schedules": {
+      "get": {
+        "summary": "List Schedules",
+        "description": "Retrieves a list of this Organization's Schedules.\n",
+        "tags": [
+          "How To: Automate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Organization's Schedules.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Schedule"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Schedule",
+        "description": "Creates a Schedule.\n",
+        "tags": [
+          "How To: Automate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Schedule just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schedule"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/schedules/{id}": {
+      "get": {
+        "summary": "Get a Schedule",
+        "description": "Retrieves an individual Schedule by ID.\n",
+        "tags": [
+          "How To: Automate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Schedule's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Schedule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schedule"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a Schedule",
+        "description": "Updates an individual Schedule by ID.\n",
+        "tags": [
+          "How To: Automate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Schedule's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Schedule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schedule"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Schedule",
+        "description": "Deletes an individual Schedule by ID.\n",
+        "tags": [
+          "How To: Automate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Schedule's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Schedule successfully deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/{id}/runs": {
+      "get": {
+        "summary": "List Scenario Runs",
+        "description": "Retrieves a list of Runs for the given Scenario ID.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/PageQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/OutcomeQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/RanAfterQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/RanBeforeQueryParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of the Scenario's Runs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Run"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Scenario Run",
+        "description": "Creates a Run for the given scenario given an optional set of token replacements.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tokens": {
+                    "type": "object"
+                  },
+                  "notify": {
+                    "type": "string",
+                    "enum": [
+                      "me",
+                      "team"
+                    ],
+                    "default": "me",
+                    "description": "Determines who receives notifications. The default `me` means notifications are only sent to the authenticated user initiating the run creation request, while `team` will send to any associated Notification Group(s) or the Organization's global notification alias.\n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Run just created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returns when notify value is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/{scenarioId}/runs/{id}": {
+      "get": {
+        "summary": "Get a Scenario Run",
+        "description": "Retrieves an individual Run by its ID.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "scenarioId",
+            "in": "path",
+            "description": "Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Run's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/{scenarioId}/mostRecentRun": {
+      "get": {
+        "summary": "Get a Scenario's Most Recent Run",
+        "description": "Retrieves the most recent Run of the given Scenario.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "scenarioId",
+            "in": "path",
+            "description": "Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{org}/scenarios/{scenarioId}/runs/{runId}/log/{id}": {
+      "get": {
+        "summary": "Get a Scenario Run Log",
+        "description": "Retrieves an individual Run Log given its ID.\n",
+        "tags": [
+          "How To: Test"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrgPathParam"
+          },
+          {
+            "name": "scenarioId",
+            "in": "path",
+            "description": "Scenario's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "runId",
+            "in": "path",
+            "description": "Run's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Run Log's ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Run Log.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunLog"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "jwtBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "NotificationGroup": {
+        "description": "Represents a notification group that can be notified during a scenario run.",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Notification Group name."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email alias of the notification group.",
+            "nullable": true
+          },
+          "members": {
+            "description": "The users that are members of this notification group.",
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Notification Group."
+          },
+          "uuid": {
+            "type": "string",
+            "readOnly": true,
+            "description": "An identifier for this Notification Group in the form of a UUID."
+          },
+          "createdAt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Notification Group's creation."
+          },
+          "updatedAt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Notification Group was last modified."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object who created this Notification Group."
+          }
+        }
+      },
+      "Connection": {
+        "description": "Represents a connection between Stack Moxie and another platform.",
+        "required": [
+          "cog"
+        ],
+        "type": "object",
+        "properties": {
+          "cog": {
+            "type": "string",
+            "enum": [
+              "automatoninc/dynamics",
+              "automatoninc/eloqua",
+              "stackmoxie/hubspot",
+              "automatoninc/marketo",
+              "automatoninc/pardot",
+              "automatoninc/salesforce"
+            ],
+            "description": "Cog Name in the form`vendor/name` (see registry).\n"
+          },
+          "auth": {
+            "type": "object",
+            "writeOnly": true,
+            "description": "Authentication details required by the given Cog."
+          },
+          "profile": {
+            "type": "string",
+            "enum": [
+              "default"
+            ],
+            "default": "default",
+            "description": "Profile name."
+          },
+          "isValid": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Whether or not the Connection is valid (e.g. authentication details are still up-to-date)."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Connection."
+          },
+          "uuid": {
+            "type": "string",
+            "readOnly": true,
+            "description": "An identifier for this Connection in the form of a UUID."
+          },
+          "createdAt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Connection's creation."
+          },
+          "updatedAt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Connection was last modified."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object who created this Connection."
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Folder": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Folder Name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Brief description of the Folder's purpose or intention."
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this Folder in the form of a UUID."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Folder."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User who created this Folder."
+          },
+          "lastUpdatedBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User who last updated this Folder."
+          },
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Folder's creation."
+          },
+          "updatedAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Folder was last updated."
+          }
+        }
+      },
+      "Organization": {
+        "description": "Represents a company, client, or environment under which Credentials, Scenarios, Runs, and Folders are scoped.",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The Organization's name."
+          },
+          "statusPageIsPublic": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether or not the Organization's status dashboard can be viewed by unauthenticated users."
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this Organization in the form of a UUID."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Organization."
+          },
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Organization's creation."
+          },
+          "plan": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The subscription-level associated with this Organization."
+          },
+          "urlSlug": {
+            "type": "string",
+            "readOnly": true,
+            "description": "URL slug used as part of the Organization's public status page (e.g. https://app.stackmoxie.com/status/{urlSlug}). Only relevant when statusPageIsPublic is set to true."
+          },
+          "maxRunsPerPeriod": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "The maximum number of Runs that this Organization is allowed to create in a given month."
+          },
+          "scheduleIntervalLowerBound": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "The lower-bound of time (in seconds) that this Organization is allowed to schedule Scenarios."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object who created this Scenario."
+          }
+        }
+      },
+      "OrganizationMember": {
+        "description": "A representation of the relationship between a User and an Organization, including the User's role in the organization.",
+        "required": [
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "org-admin",
+              "org-creator"
+            ],
+            "description": "The role this team member has in the Organization."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Membership"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this membership in the form of a UUID."
+          },
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this team membership's creation."
+          },
+          "updatedAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this team membership was last modified."
+          },
+          "member": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object for the teammate this membership represents."
+          },
+          "organization": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/Organization"
+              }
+            ],
+            "description": "The ID or Organization object this membership relates to."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object who created this membership."
+          }
+        }
+      },
+      "RegistryEntry": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the Cog (e.g. `cog-vendor/system-name`)"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable name of the system."
+          },
+          "version": {
+            "type": "string",
+            "description": "Cog Version."
+          },
+          "homepage": {
+            "type": "string",
+            "format": "url",
+            "description": "Cog homepage (for reporting bugs)."
+          },
+          "authHelpUrl": {
+            "type": "string",
+            "format": "url",
+            "description": "URL to documentation outlining how to authenticate."
+          },
+          "stepDefinitionsList": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "A list of step definitions (see https://crank.automatoninc.com)"
+          },
+          "authFieldsList": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "A list of authentication fields required by this Cog (see https://crank.automatoninc.com)"
+          }
+        }
+      },
+      "Run": {
+        "description": "Represents a single run of a Test Scenario.",
+        "type": "object",
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The status or outcome of the test.",
+            "enum": [
+              "Created",
+              "Running",
+              "Passed",
+              "Failed",
+              "Error",
+              "Waiting"
+            ]
+          },
+          "duration": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Duration (in ms) that this run took to complete."
+          },
+          "scenario": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            ],
+            "readOnly": true,
+            "description": "The ID or Scenario object this Run is associated with."
+          },
+          "id": {
+            "type": "number",
+            "readOnly": true,
+            "description": "A numeric identifier for this Run."
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this Run in the form of a UUID."
+          },
+          "log": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/RunLog"
+              }
+            ],
+            "readOnly": true,
+            "description": "The ID or RunLog object corresponding to this Run."
+          },
+          "createdAt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Run's creation."
+          },
+          "updatedAt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Run was last updated."
+          },
+          "createdBy": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "readOnly": true,
+            "description": "The ID or User object who created this Run."
+          }
+        }
+      },
+      "RunLog": {
+        "description": "Represents a detailed log associated with a specific test Scenario Run.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Run Log."
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this Run Log in the form of a UUID."
+          },
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Run Log's creation."
+          },
+          "updatedAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Run Log was last modified."
+          },
+          "body": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "type": "string",
+                  "enum": [
+                    "Passed",
+                    "Failed",
+                    "Error"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                },
+                "cog": {
+                  "type": "string"
+                },
+                "stepId": {
+                  "type": "string"
+                },
+                "stepData": {
+                  "type": "object"
+                }
+              }
+            },
+            "readOnly": true
+          }
+        }
+      },
+      "Scenario": {
+        "required": [
+          "definition",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the Scenario."
+          },
+          "description": {
+            "type": "string",
+            "description": "A brief description of the Scenario."
+          },
+          "definition": {
+            "$ref": "#/components/schemas/ScenarioDefinition"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of scenario. Determines how the scenario will be used and how it is handled in the UI.",
+            "enum": [
+              "default",
+              "template",
+              "from-template"
+            ]
+          },
+          "severity": {
+            "type": "integer",
+            "description": "Issue severity status of the scenario, 1 being the most severe and 4 being the least.",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "dashboardSetting": {
+            "type": "string",
+            "description": "Value that indicates whether to include this scenario in the Status Dashboard or not.",
+            "enum": [
+              "default",
+              "include",
+              "exclude"
+            ]
+          },
+          "feature": {
+            "description": "The ID or Folder object under which this Scenario lives (if any).",
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/Folder"
+              }
+            ],
+            "nullable": true
+          },
+          "schedule": {
+            "description": "The ID or Schedule object associated with this Scenario (if any).",
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/Folder"
+              }
+            ],
+            "nullable": true
+          },
+          "notificationGroups": {
+            "description": "The Notification Groups that will be notified for scenario run results.",
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/NotificationGroup"
+            }
+          },
+          "instructions": {
+            "type": "string",
+            "description": "For templates only. Additional guidelines on how to work with this scenarios."
+          },
+          "exposedToApis": {
+            "type": "boolean",
+            "description": "For templates only. Value that indicates whether to include this scenario when querying the exposedTemplates endpoint."
+          },
+          "isLinkable": {
+            "type": "boolean",
+            "description": "For templates only. Indicates whether this scenario can be chained onto other scenarios."
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this Scenario in the form of a UUID."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Scenario."
+          },
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Scenario's creation."
+          },
+          "updatedAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Scenario's last update."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object who created this Scenario."
+          },
+          "lastUpdatedBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
+            "description": "The ID or User object who last updated this Scenario."
+          }
+        }
+      },
+      "ScenarioDefinition": {
+        "required": [
+          "steps"
+        ],
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string",
+            "description": "The name of the scenario."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the scenario's purpose."
+          },
+          "steps": {
+            "type": "array",
+            "$ref": "#/components/schemas/Steps"
+          },
+          "linkedScenarios": {
+            "type": "object",
+            "description": "Scenarios that should run based on the outcome of this scenario.",
+            "$ref": "#/components/schemas/LinkedScenarios"
+          }
+        }
+      },
+      "Steps": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "cog",
+            "stepId"
+          ],
+          "properties": {
+            "cog": {
+              "type": "string",
+              "description": "The name of the Cog (e.g. vendor/cog-name)"
+            },
+            "stepId": {
+              "type": "string",
+              "description": "The ID of the step to be executed."
+            },
+            "name": {
+              "type": "string",
+              "description": "The human-readable name of the step."
+            },
+            "data": {
+              "type": "object",
+              "description": "Data to be supplied to the step during step execution."
+            },
+            "waitFor": {
+              "type": "integer",
+              "default": 0,
+              "description": "The amount of time (in seconds) to wait before executing the step."
+            },
+            "failAfter": {
+              "type": "integer",
+              "default": 0,
+              "description": "The amount of time (in seconds) to retry this step before considering the scenario run to have failed."
+            }
+          }
+        }
+      },
+      "LinkedScenarios": {
+        "description": "Scenarios that should run based on the outcome of this scenario.",
+        "properties": {
+          "onPass": {
+            "$ref": "#/components/schemas/LinkedScenarioOutcome"
+          },
+          "onFail": {
+            "$ref": "#/components/schemas/LinkedScenarioOutcome"
+          }
+        }
+      },
+      "LinkedScenarioOutcome": {
+        "description": "The scenario that should run based on the outcome of this scenario.",
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "integer",
+            "description": "Id of the template scenario that should be run."
+          },
+          "steps": {
+            "type": "array",
+            "$ref": "#/components/schemas/Steps"
+          }
+        }
+      },
+      "Job": {
+        "description": "The status of the job that is running asynchronously.",
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Job's creation."
+          },
+          "updatedAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Job's last update."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Job."
+          },
+          "jobId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the job that is running."
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Status of the job.",
+            "enum": [
+              "Processing",
+              "Complete",
+              "Failed"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "readOnnly": true,
+            "description": "The type of async Job.",
+            "enum": [
+              "Scenario"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "readOnly": true,
+            "description": "JSON string containing all data from the job."
+          }
+        }
+      },
+      "Schedule": {
+        "description": "Represents a Schedule on which an associated Scenario will be run.",
+        "required": [
+          "interval",
+          "scheduledModel",
+          "scheduledScenario"
+        ],
+        "type": "object",
+        "properties": {
+          "interval": {
+            "type": "integer",
+            "description": "Frequency (in seconds) at which this Schedule runs."
+          },
+          "scheduledModel": {
+            "type": "string",
+            "enum": [
+              "scenario"
+            ],
+            "description": "The type of object to be scheduled. Currently, only Scenarios are supported."
+          },
+          "scheduledScenario": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            ],
+            "description": "If `scheduledModel` is set to Scenario, this is the ID or Scenario object to be run on the given interval."
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "An identifier for this Schedule in the form of a UUID."
+          },
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "A numeric identifier for this Schedule."
+          },
+          "createdAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of this Schedule's creation."
+          },
+          "updatedAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Schedule was last updated."
+          },
+          "lastRanAt": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unix timestamp (ms) of when this Schedule last ran."
+          },
+          "createdBy": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            ],
+            "description": "The ID or User object who created this schedule."
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "emailAddress",
+          "fullName",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "emailAddress": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "emailStatus": {
+            "type": "string"
+          },
+          "emailChangeCandidate": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "fullName": {
+            "maxLength": 120,
+            "type": "string"
+          },
+          "notificationSetting": {
+            "type": "string"
+          },
+          "notificationOverride": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "maxTrials": {
+            "type": "string"
+          },
+          "isSuperAdmin": {
+            "type": "boolean"
+          },
+          "passwordResetToken": {
+            "type": "string"
+          },
+          "passwordResetTokenExpiresAt": {
+            "type": "string"
+          },
+          "emailProofToken": {
+            "type": "string"
+          },
+          "emailProofTokenExpiresAt": {
+            "type": "string"
+          },
+          "tosAcceptedByIp": {
+            "type": "string"
+          },
+          "lastSeenAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "WhereQueryParam": {
+        "name": "where",
+        "in": "query",
+        "description": "This follows the standard from http://sailsjs.com/documentation/reference/blueprint-api/find-where",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "LimitQueryParam": {
+        "name": "limit",
+        "in": "query",
+        "description": "The maximum number of records to send back (useful for pagination). Defaults to undefined",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "SkipQueryParam": {
+        "name": "skip",
+        "in": "query",
+        "description": "The number of records to skip (useful for pagination).",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "SortQueryParam": {
+        "name": "sort",
+        "in": "query",
+        "description": "The sort order. By default, returned records are sorted by primary key value in ascending order. e.g. ?sort=lastName%20ASC",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "PopulateQueryParam": {
+        "name": "populate",
+        "in": "query",
+        "description": "check for better understanding -> http://sailsjs.com/documentation/reference/blueprint-api/find-where",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "PageQueryParam": {
+        "name": "page",
+        "in": "query",
+        "description": "This helps with pagination and when the limit is known",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "OutcomeQueryParam": {
+        "name": "outcome",
+        "in": "query",
+        "description": "Used for filtering scenario runs by outcome by passing in comma-delimited values. e.g. ?outcome=Passed,Failed",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "RanAfterQueryParam": {
+        "name": "ranAfter",
+        "in": "query",
+        "description": "Used to filter scenario runs that ran after the specified date. e.g. ?ranAfter=1591702698140",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "RanBeforeQueryParam": {
+        "name": "ranBefore",
+        "in": "query",
+        "description": "Used to filter scenario runs that ran before the specified date. e.g. ?ranBefore=1591702698140",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "SelectQueryParam": {
+        "name": "select",
+        "in": "query",
+        "description": "This helps with what to return for the user and its \",\" delimited",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OrgPathParam": {
+        "name": "org",
+        "in": "path",
+        "description": "Organization's UUID (to scope the API call).",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "IDPathParam": {
+        "name": "id",
+        "in": "path",
+        "description": "This is to identify a particular object out",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "PerPageQueryParam": {
+        "name": "perPage",
+        "in": "query",
+        "description": "This helps with pagination and when the limit is known for pagify",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses": {
+      "Forbidden": {
+        "description": "Returned if the authenticated user isn't allowed to perform this action.\n",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Returned when there may be a problem with your API token.\n",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "jwtBearerAuth": []
+    }
+  ]
+}

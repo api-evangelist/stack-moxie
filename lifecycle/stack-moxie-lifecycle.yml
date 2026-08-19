@@ -1,15 +1,61 @@
-generated: '2026-07-21'
+generated: '2026-08-14'
 method: searched
-source: https://www.stackmoxie.com/app-status/
-status_page: https://www.stackmoxie.com/app-status/
+source: >-
+  https://www.stackmoxie.com/app-status/, https://statuspage.freshping.io/64917-StackMoxie,
+  https://github.com/run-crank/cli/releases
 note: >-
-  Stack Moxie operates a public App & API status page. It publishes no formal
-  versioning or deprecation policy for a hosted API (it exposes none); the Crank
-  CLI is versioned with SemVer git tags (see changelog/).
+  Stack Moxie operates a public App & API status page (hosted on Freshping,
+  launched 2021-04-15, embedded at stackmoxie.com/app-status/) whose stated scope
+  explicitly covers API service status. It publishes a versioned REST API
+  (URI-path /v1) but no versioning policy, no deprecation policy, no API changelog
+  and no SLA for it - and the OpenAPI document carries no info.version, so the
+  contract itself cannot be pinned. The open-source Crank CLI is versioned with
+  SemVer git tags, but its release train stopped in 2020.
+status_page: https://www.stackmoxie.com/app-status/
+status_page_upstream: https://statuspage.freshping.io/64917-StackMoxie
+status_page_provider: Freshping
+status_page_launched: '2021-04-15'
+status_page_scope: >-
+  App and API service status with latency from several global locations, hour-by-hour
+  for the past day
 versioning:
   scheme: semver
   current: v0.11.1
+  applies_to: Crank CLI
   docs: https://github.com/run-crank/cli/releases
+  api_versioning: uri-path
+  api_versioning_current: v1
+  api_versioning_note: >-
+    Every REST path is prefixed /v1/. No version header, no dated versions, no
+    published policy for how v2 would be introduced, and info.version is absent
+    from the OpenAPI document.
 deprecation:
   policy_url: null
   sunset_header: false
+  notice_period: null
+  note: no deprecation or end-of-life policy is published for any artifact
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    "24/6 monitoring and support" is stated on the security page; no uptime target,
+    credits or SLA document is published
+support:
+  channels:
+  - https://www.stackmoxie.com/support/
+  - Customer Success weekly Office Hours (all plans)
+  incident_response: expedited on the Enterprise plan only
+maintenance_signals:
+  cli_last_release: '2020-06-23'
+  cli_last_commit: '2023-03-04'
+  utilities_last_publish: '2022-12-30'
+  vscode_extension_last_publish: '2020-03-28'
+  cog_images_latest_tag_last_push: '2020-07-09'
+  cog_source_last_push: '2025-11-17'
+  reading: >-
+    Cog SOURCE repositories are still being worked (cog-marketo 2025-11-17, cog-web
+    2025-11-12, cog-inbox-mailgun 2025-07-16, cog-sfmc 2025-05-21), but none of
+    that work has reached a published, pinnable artifact in five years. The gap
+    between an actively maintained source tree and a frozen distribution is the
+    lifecycle finding here.
+deprecated_operations: []

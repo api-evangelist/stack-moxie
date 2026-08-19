@@ -1,0 +1,156 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/stack-moxie-rest-api-openapi.yml
+docs: https://api.stackmoxie.com/
+note: >-
+  Cross-cutting runtime semantics for the two interfaces Stack Moxie publishes:
+  the hosted REST API (OpenAPI 3.0.1, 43 operations, base
+  https://app.stackmoxie.com/api/) and the open-source Cog gRPC contract
+  (automaton.cog.CogService). The REST conventions below are Sails.js blueprint
+  conventions - the query-parameter vocabulary and the linked sailsjs.com
+  documentation in the spec make the backend framework explicit, which matters
+  because it tells you the semantics of `where`, `populate` and `sort` are
+  Waterline's, not something Stack Moxie defined.
+rest:
+  base_url: https://app.stackmoxie.com/api/
+  docs: https://api.stackmoxie.com/
+  spec: openapi/stack-moxie-rest-api-openapi.yml
+  spec_version: OpenAPI 3.0.1
+  media_type: application/json
+  framework_signature: Sails.js / Waterline blueprint API
+  authentication:
+    style: HTTP Bearer, JWT
+    header: 'Authorization: Bearer <jwt>'
+    detail: authentication/stack-moxie-authentication.yml
+  resource_scoping:
+    style: tenant-in-path
+    pattern: /v1/organizations/{org}/...
+    org_format: uuid
+    detail: >-
+      Every operation except POST /v1/organizations and PATCH
+      /v1/organizations/{org} is nested under an Organization UUID. There is no
+      implicit "current organization" - the tenant is always explicit in the URL.
+  identifiers:
+    dual: true
+    detail: >-
+      Objects carry BOTH a numeric `id` and a `uuid`. Path parameters are declared
+      as opaque strings, so either form is accepted; `{org}` specifically is
+      declared format uuid. Relationship fields are `oneOf: [integer, <object>]` -
+      the same field returns a bare id or a fully populated object depending on
+      the `populate` query parameter, so clients must handle both shapes.
+  pagination:
+    style: offset and page, Sails blueprint
+    params:
+    - {name: limit, in: query, type: integer, description: max records to return; defaults to undefined}
+    - {name: skip, in: query, type: integer, description: records to skip}
+    - {name: page, in: query, type: integer, description: page number, used when limit is known}
+    - {name: perPage, in: query, type: integer, description: page size for pagify}
+    - {name: sort, in: query, type: string, example: "?sort=lastName%20ASC"}
+    response_envelope: none
+    response_detail: >-
+      List operations return a bare JSON array, not an envelope. There is no total
+      count, no next/prev link, and no Link header - a client cannot tell whether
+      more records exist except by requesting another page and seeing it come back
+      short. Two overlapping pagination idioms (skip/limit and page/perPage) are
+      offered without documented precedence.
+  filtering:
+    params:
+    - {name: where, in: query, type: string, description: "Waterline `where` criteria; semantics per sailsjs.com blueprint find-where"}
+    - {name: outcome, in: query, type: integer, description: "comma-delimited run outcomes, e.g. ?outcome=Passed,Failed"}
+    - {name: ranAfter, in: query, type: integer, description: "unix ms, e.g. ?ranAfter=1591702698140"}
+    - {name: ranBefore, in: query, type: integer, description: unix ms}
+    note: >-
+      `outcome` is typed integer in the spec but its own example passes the string
+      values Passed,Failed - a spec defect worth flagging to the provider.
+  field_expansion:
+    supported: true
+    params:
+    - {name: populate, in: query, type: string, description: expand related records (Waterline populate)}
+    - {name: select, in: query, type: string, description: comma-delimited field list to return}
+  idempotency:
+    supported: false
+    header: null
+    detail: >-
+      No Idempotency-Key header, no client-supplied request identifier, and no
+      de-duplication window anywhere in the spec. This matters most on POST
+      /v1/organizations/{org}/scenarios/{id}/runs and POST
+      /v1/organizations/{org}/asyncScenario, which execute tests against live
+      third-party systems and consume metered "runs" - a retried POST is a second
+      billable execution with real side effects in Salesforce, Marketo or a
+      customer's inbox. Retry only after a GET confirms the first attempt did not
+      land.
+  async:
+    supported: true
+    pattern: submit-then-poll
+    detail: >-
+      POST /v1/organizations/{org}/asyncScenario returns a Job with a `jobId`
+      (uuid); poll GET /v1/organizations/{org}/job/{jobId} until `status` is
+      Complete or Failed (values: Processing | Complete | Failed), then read the
+      `data` field, which is a JSON string that must be parsed a second time.
+    callback: none
+    detail_no_callback: >-
+      There is no webhook, callback URL or event stream to receive completion -
+      polling is the only completion signal.
+  versioning:
+    scheme: uri-path
+    current: v1
+    header: null
+    detail: >-
+      All paths are prefixed /v1/. info.version is absent from the spec, so the
+      document itself carries no version identifier.
+  timestamps:
+    format: unix-milliseconds
+    detail: >-
+      createdAt/updatedAt are unix millisecond timestamps, but their declared type
+      is inconsistent across schemas (string on Scenario and NotificationGroup,
+      integer on Schedule and Job) - clients should coerce.
+  error_envelope:
+    shape: '{ "name": string, "message": string }'
+    schema: '#/components/schemas/Error'
+    rfc9457: false
+    catalog: errors/stack-moxie-problem-types.yml
+  rate_limit_signalling:
+    supported: false
+    detail: >-
+      No rate limits documented, no 429 in any operation, and no RateLimit-*/
+      Retry-After headers in the spec. See rate-limits/stack-moxie-rate-limits.yml.
+      The real constraint is commercial: metered runs per plan.
+  tracing:
+    supported: false
+    detail: no request-id or correlation header is defined on the REST surface
+grpc:
+  contract: grpc/stack-moxie-cog.proto
+  service: automaton.cog.CogService
+  transport: HTTP/2, one gRPC server per Cog (typically a local Docker container)
+  operations:
+  - GetManifest (ManifestRequest) returns (CogManifest)
+  - RunStep (RunStepRequest) returns (RunStepResponse)
+  - RunSteps (stream RunStepRequest) returns (stream RunStepResponse)
+  discovery:
+    style: server-declared manifest via GetManifest
+    rest_projection: GET /v1/organizations/{org}/registry returns RegistryEntry objects
+  idempotency:
+    supported: false
+    detail: >-
+      request_id, scenario_id and requestor_id on RunStepRequest are correlation
+      identifiers only; no de-duplication behaviour is specified and ACTION-type
+      steps mutate the system under test on every replay.
+  tracing:
+    supported: true
+    fields: [request_id, scenario_id, requestor_id]
+  streaming:
+    supported: true
+    detail: >-
+      RunSteps is bidirectional streaming, so a Cog can pay expensive
+      authentication or setup once per stream rather than once per step.
+  error_envelope:
+    style: outcome enum in the response body, not a gRPC status
+    catalog: errors/stack-moxie-outcome-codes.yml
+cross_links:
+  authentication: authentication/stack-moxie-authentication.yml
+  errors_rest: errors/stack-moxie-problem-types.yml
+  errors_grpc: errors/stack-moxie-outcome-codes.yml
+  lifecycle: lifecycle/stack-moxie-lifecycle.yml
+  rate_limits: rate-limits/stack-moxie-rate-limits.yml
+  data_model: data-model/stack-moxie-data-model.yml
+  plans: plans/stack-moxie-plans-pricing.yml

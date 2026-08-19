@@ -1,0 +1,144 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.stackmoxie.com/pricing/
+docs: https://www.stackmoxie.com/pricing/
+note: >-
+  Stack Moxie publishes a full public price list for the product itself. There is
+  no separate API plan and no per-call API pricing: the REST API at
+  https://app.stackmoxie.com/api/ is included with the account and is metered by
+  the same unit as the UI - a "Run" (one activity executed in Stack Moxie: a test,
+  a list import, or a spreadsheet trigger). Calling POST .../scenarios/{id}/runs or
+  POST .../asyncScenario therefore draws down the plan quota below. The pricing
+  page does not say which tier grants API access, nor whether API-initiated runs
+  are metered differently - a real gap for anyone budgeting an integration. The
+  open-source Crank CLI and its Cogs are free and unmetered and are not covered by
+  these plans.
+currency: USD
+billing_unit: run
+billing_unit_definition: >-
+  A run is one activity executed in Stack Moxie - a test, a list import, or a
+  spreadsheet trigger.
+billing_period: month
+billing_period_note: >-
+  Prices are published against monthly run quotas; no annual-billing toggle was
+  observed on the pricing page.
+plan_count: 4
+plans:
+- name: Starter
+  price: 0
+  currency: USD
+  period: month
+  self_service: true
+  tagline: Begin testing your stack
+  included_runs: 25
+  overage: null
+  overage_note: additional runs require an upgrade
+  data_retention: 90 days
+  limits:
+    live_monitors: 0
+    smoke_tests: 25
+    integrations: standard
+  features:
+  - Availability Dashboard
+  - Standard Integrations
+  - Synthetic Data (up to 25 tests)
+  - UTM Builder
+  - Self-service support and weekly Office Hours
+- name: Individual
+  price: 99
+  currency: USD
+  period: month
+  self_service: true
+  tagline: Build daily tests for your stack
+  included_runs: 100
+  overage:
+    price_per_run: 2
+    currency: USD
+  bundles:
+  - runs: 250
+    price: 450
+    price_per_run: 1.80
+    discount: 10%
+  data_retention: 90 days
+  limits:
+    live_monitors: 1
+    smoke_tests: unlimited
+    integrations: standard
+  features:
+  - Everything in Starter
+  - One Live Monitor (daily)
+  - Spreadsheet Triggers
+  - Campaign Builder
+  - Initial onboarding consult
+- name: Growth
+  price: 1000
+  price_display: $1k
+  currency: USD
+  period: month
+  self_service: false
+  tagline: Monitor more campaigns and flows
+  included_runs: 500
+  overage:
+    price_per_run: 2
+    currency: USD
+  bundles:
+  - runs: 500
+    price: 750
+    price_per_run: 1.50
+    discount: 25%
+  data_retention: 90 days
+  limits:
+    live_monitors: unlimited
+    integrations: standard + premium
+  features:
+  - Everything in Individual
+  - Unlimited Live Monitors
+  - Premium Integrations
+  - API Health dashboard
+  - Asana Triggers
+  - Published Values
+  - List Import
+  - SSO (SAML)
+  - Full-service onboarding and ongoing Customer Success
+- name: Enterprise
+  price: 4000
+  price_display: $4k
+  currency: USD
+  period: month
+  self_service: false
+  tagline: Deploy at scale across your stack
+  included_runs: 500
+  overage:
+    price_per_run: 2
+    currency: USD
+  bundles:
+  - runs: 1000
+    price: 1000
+    price_per_run: 1.00
+    discount: 50%
+  data_retention: custom
+  limits:
+    live_monitors: unlimited
+    integrations: standard + premium + custom
+  features:
+  - Everything in Growth
+  - Enterprise-grade SSO (Federated or SAML)
+  - Custom Integrations
+  - Custom Regions
+  - Expedited Incident Response
+  - Support for multiple teams
+  - Dedicated Customer Success
+free_tier:
+  available: true
+  plan: Starter
+  terms: 25 runs per month, free for life, no credit card mentioned
+contact_sales_required:
+- Growth
+- Enterprise
+purchase_channels:
+- name: Direct
+  url: https://app.stackmoxie.com
+- name: Microsoft Azure Marketplace
+  note: Microsoft completed a security review; free and paid offers available
+- name: Salesforce AppExchange
+  note: Salesforce reviewed the integration; free and paid versions contractable

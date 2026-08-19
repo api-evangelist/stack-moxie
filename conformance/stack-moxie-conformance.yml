@@ -1,0 +1,132 @@
+generated: '2026-08-14'
+method: derived
+source: >-
+  grpc/stack-moxie-cog.proto, https://www.stackmoxie.com/security/,
+  https://www.stackmoxie.com/pricing/, well-known/stack-moxie-well-known.yml
+note: >-
+  Asserts which cross-cutting standards Stack Moxie's published surface conforms
+  to, across both interfaces it ships: the hosted REST API (OpenAPI 3.0.1 at
+  api.stackmoxie.com) and the Cog gRPC contract. Compliance claims are read from
+  the provider's own security page and are recorded with their real attribution -
+  several are Azure's certifications inherited via hosting, not certifications
+  Stack Moxie holds.
+standards:
+- id: protobuf-proto3
+  conforms: true
+  evidence: 'grpc/stack-moxie-cog.proto declares syntax = "proto3", package automaton.cog'
+- id: grpc
+  conforms: true
+  evidence: >-
+    automaton.cog.CogService defines unary RPCs (GetManifest, RunStep) and a
+    bidirectional streaming RPC (RunSteps)
+- id: semver
+  conforms: true
+  evidence: >-
+    CLI releases tagged v0.11.1 etc; CogManifest.version reports a semver string;
+    npm and Docker artifacts semver-tagged
+- id: oci-images
+  conforms: true
+  evidence: Cogs are distributed as Docker images under hub.docker.com/u/automatoninc
+- id: saml2
+  conforms: true
+  evidence: >-
+    SSO (SAML) on the Growth plan and SSO (Federated or SAML) on Enterprise, per
+    the published pricing comparison table
+- id: soc2
+  conforms: true
+  attribution: self
+  evidence: >-
+    "Stack Moxie has completed our SOC2 Audit. Contact us to request the Audit
+    Report." - https://www.stackmoxie.com/security/. Type not stated for Stack
+    Moxie's own audit; report is not public.
+- id: iso-27001
+  conforms: inherited
+  attribution: Microsoft Azure (hosting platform)
+  evidence: >-
+    "hosted on Azure, which provides ... SOC 2 Type II and ISO 27001
+    certifications" - Stack Moxie does not claim to hold ISO 27001 itself
+- id: tls
+  conforms: true
+  evidence: >-
+    security page states 2,048-bit or better keys and TLS 1.0+, modern browsers on
+    TLS 1.2/1.3; live probe of stackmoxie.com observed TLSv1.3 with HSTS
+    max-age=63072000 (security/stack-moxie-domain-security.yml)
+  caveat: >-
+    the published floor of "TLS 1.0 or above" is below current baseline guidance
+    (TLS 1.2), even though the observed deployment negotiates TLS 1.3
+- id: openapi
+  conforms: true
+  version: 3.0.1
+  evidence: >-
+    Complete OpenAPI 3.0.1 document (25 paths, 43 operations, 17 component schemas,
+    13 reusable parameters, 2 reusable responses) published as the rendered
+    reference at https://api.stackmoxie.com/, embedded in the ReDoc page state.
+    Saved verbatim to openapi/_original/stack-moxie-openapi.json.
+  caveats:
+  - no operationId on any of the 43 operations
+  - no info.version on the document
+  - no raw .json/.yaml URL - the spec is only retrievable by scraping the docs page
+  - no examples anywhere in the document
+- id: http-bearer-jwt
+  conforms: true
+  evidence: >-
+    components.securitySchemes.jwtBearerAuth is type http, scheme bearer,
+    bearerFormat JWT, applied globally via a root-level security requirement
+- id: oauth2
+  conforms: false
+  evidence: >-
+    the API uses an account-issued JWT with no authorization server;
+    /.well-known/oauth-authorization-server 404 on every host, and no token,
+    refresh, introspection or revocation endpoint exists in the spec
+- id: openid-connect
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 on every host
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    errors return application/json with a bespoke two-field { name, message } Error
+    schema - no problem+json media type, no type URI, no title/status/instance
+    (errors/stack-moxie-problem-types.yml)
+- id: rest-crud
+  conforms: true
+  evidence: >-
+    consistent collection/item resource design with GET/POST on collections and
+    GET/PATCH/DELETE on items, 204 on delete, tenant scoping under
+    /v1/organizations/{org}
+- id: sails-blueprint-query-api
+  conforms: true
+  evidence: >-
+    where/limit/skip/sort/populate/select query parameters whose descriptions link
+    to sailsjs.com blueprint documentation, i.e. Waterline semantics are inherited
+    rather than defined by Stack Moxie
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt 404 on stackmoxie.com, www.stackmoxie.com, app.stackmoxie.com
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: >-
+    no deprecation policy and no Sunset/Deprecation header declared on any of the
+    43 operations
+- id: asyncapi
+  conforms: false
+  not_applicable: true
+  evidence: >-
+    no event, webhook or callback surface. The API's only asynchronous pattern is
+    submit-then-poll (POST /v1/organizations/{org}/asyncScenario returns a jobId
+    polled at GET /v1/organizations/{org}/job/{jobId}); notification groups deliver
+    to email aliases, not to subscriber URLs, and the OpenAPI declares no
+    `callbacks` and no `webhooks`.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json returned 404 on all
+    five probed hosts
+- id: mcp
+  conforms: false
+  evidence: no Model Context Protocol server published by Stack Moxie or run-crank
+- id: dnssec
+  conforms: false
+  evidence: 'security/stack-moxie-domain-security.yml: dnssec false, no CAA records'
+- id: dmarc
+  conforms: partial
+  evidence: 'DMARC record present with policy p=none - published but not enforcing'

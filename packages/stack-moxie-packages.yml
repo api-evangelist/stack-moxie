@@ -1,25 +1,233 @@
-generated: '2026-07-21'
+generated: '2026-08-14'
 method: searched
-source: https://crank.run
+source: >-
+  registry.npmjs.org, hub.docker.com/u/automatoninc, marketplace.visualstudio.com,
+  api.github.com/repos/run-crank, https://crank.run
 note: >-
-  Stack Moxie publishes no client SDK for a hosted REST API (it exposes no public
-  API). Its first-party open-source distribution is the Crank CLI (a BDD test
-  runner for integrated SaaS) and its ecosystem of gRPC "Cog" plugins, plus a
-  VS Code authoring extension. These are developer tools, not API client SDKs,
-  so no `SDKs` pointer is emitted.
+  Stack Moxie publishes no client SDK for a hosted REST API, because it exposes no
+  public API. Its first-party developer distribution is the open-source Crank
+  ecosystem: the `crank` CLI (oclif, distributed as a signed tarball via an install
+  script, NOT via npm - the npm name `crank` belongs to an unrelated Yahoo package),
+  the `@run-crank/utilities` npm library used to implement Cogs against the
+  published Cog gRPC contract in grpc/stack-moxie-cog.proto, a VS Code authoring
+  extension, and 19 public Docker images under the `automatoninc` Docker Hub
+  namespace that ARE the Cogs.
+currency_finding: >-
+  Every first-party artifact is materially stale relative to its own source. The
+  CLI's last tagged release is v0.11.1 (2020-06-23) though the repo saw commits to
+  2023; the VS Code extension last shipped 2020-03-28; the npm utilities library
+  last shipped 2022-12-30; and every Docker `latest` Cog tag was last pushed in
+  2019-2020, with 7 of the 19 images carrying no `latest` tag at all - only rolling
+  `dev-*` builds. Meanwhile the GitHub source repos for cog-marketo, cog-web,
+  cog-inbox-mailgun and cog-sfmc were pushed as recently as 2025. A consumer
+  installing a Cog today therefore pulls a 2020 image, or an unpinned `dev-*` tag
+  whose contents cannot be identified from the tag name.
 packages:
-  - language: shell
-    registry: install-script
-    name: crank
-    url: https://crank.run
-    install: curl -s https://get.crank.run/install.sh | sh
-    source: https://github.com/run-crank/cli
-    official: true
-    description: Crank CLI - BDD test automation for integrated enterprise SaaS.
-  - language: typescript
-    registry: vscode-marketplace
-    name: vscode-crank-scenario-language
-    url: https://github.com/run-crank/vscode-crank-scenario-language
-    source: https://github.com/run-crank/vscode-crank-scenario-language
-    official: true
-    description: VS Code extension for authoring and running Crank scenario files.
+- language: shell
+  registry: install-script
+  name: crank
+  package_name: crank
+  url: https://crank.run
+  install: curl -s https://get.crank.run/install.sh | sh
+  source: https://github.com/run-crank/cli
+  version: 0.11.1
+  published: '2020-06-23'
+  version_source: https://github.com/run-crank/cli/releases/tag/v0.11.1
+  official: true
+  description: >-
+    Crank CLI - no-code BDD test automation for integrated enterprise SaaS. An
+    oclif app that acts as a gRPC client to Cog servers.
+  note: >-
+    Not published to any package registry; the install script fetches an oclif
+    tarball from get.crank.run. Version read from the GitHub release tag and from
+    package.json in run-crank/cli (both 0.11.1).
+- language: javascript
+  registry: npm
+  name: "@run-crank/utilities"
+  package_name: "@run-crank/utilities"
+  url: https://www.npmjs.com/package/@run-crank/utilities
+  install: npm install @run-crank/utilities
+  source: https://github.com/run-crank/typescript-cog-utilities
+  version: 0.5.2
+  published: '2022-12-30'
+  version_source: https://registry.npmjs.org/@run-crank/utilities
+  official: true
+  description: >-
+    Shared utility methods for authoring Cogs in TypeScript against the
+    automaton.cog.CogService gRPC contract. The closest thing Stack Moxie ships to
+    a server-side SDK.
+- language: typescript
+  registry: vscode-marketplace
+  name: run-crank.crank-scenario-language
+  package_name: crank-scenario-language
+  url: https://marketplace.visualstudio.com/items?itemName=run-crank.crank-scenario-language
+  install: code --install-extension run-crank.crank-scenario-language
+  source: https://github.com/run-crank/vscode-crank-scenario-language
+  version: 0.3.0
+  published: '2020-03-28'
+  version_source: marketplace.visualstudio.com extensionquery API
+  official: true
+  description: >-
+    VS Code extension for authoring and running Crank YAML scenario files
+    (syntax highlighting + step completion).
+registries_checked:
+- registry: npm
+  result: "@run-crank/utilities found; no @run-crank/cli, no run-crank, no first-party crank"
+- registry: pypi
+  result: none (the only Python repo, run-crank/synthetic-data-tool, is unpublished)
+- registry: rubygems
+  result: none
+- registry: packagist
+  result: none
+- registry: crates.io
+  result: none
+- registry: nuget
+  result: none
+- registry: pkg.go.dev
+  result: none
+- registry: maven-central
+  result: none
+- registry: docker-hub
+  result: 19 public images under automatoninc/
+- registry: vscode-marketplace
+  result: run-crank.crank-scenario-language
+containers:
+  registry: docker-hub
+  namespace: automatoninc
+  url: https://hub.docker.com/u/automatoninc
+  install_pattern: crank cog:install --source=docker automatoninc/<cog>
+  official: true
+  note: >-
+    Cogs are gRPC services distributed as Docker images; `crank cog:install` pulls
+    them. `version` below is the tag resolved by `latest`, and `published` its push
+    date. Images marked `version: null` have NO `latest` tag - the only tags are
+    rolling `dev-*` builds, so a consumer cannot pin or identify what they pull.
+  images:
+  - name: automatoninc/marketo
+    version: latest
+    published: '2020-07-08'
+    source: https://github.com/run-crank/cog-marketo
+    source_last_push: '2025-11-17'
+    pull_count: 193145
+  - name: automatoninc/salesforce
+    version: latest
+    published: '2020-07-08'
+    semver_tag: 0.7.0
+    source: https://github.com/run-crank/cog-salesforce
+    source_last_push: '2024-09-13'
+    pull_count: 197642
+  - name: automatoninc/web
+    version: latest
+    published: '2020-07-09'
+    semver_tag: 0.6.0
+    source: https://github.com/run-crank/cog-web
+    source_last_push: '2025-11-12'
+    pull_count: 30812
+  - name: automatoninc/eloqua
+    version: latest
+    published: '2020-01-10'
+    semver_tag: 0.2.1
+    source: https://github.com/run-crank/cog-eloqua
+    source_last_push: '2024-09-13'
+    pull_count: 211184
+  - name: automatoninc/inbox-mailgun
+    version: latest
+    published: '2020-07-08'
+    semver_tag: 0.3.3
+    source: https://github.com/run-crank/cog-inbox-mailgun
+    source_last_push: '2025-07-16'
+    pull_count: 185746
+  - name: automatoninc/dns
+    version: latest
+    published: '2019-10-02'
+    semver_tag: 0.1.0
+    pull_count: 277191
+  - name: automatoninc/hubspot
+    version: latest
+    published: '2020-07-09'
+    semver_tag: 0.5.0
+    pull_count: 206167
+  - name: automatoninc/salesloft
+    version: latest
+    published: '2020-07-08'
+    semver_tag: 0.4.0
+    source: https://github.com/run-crank/cog-salesloft
+    pull_count: 180599
+  - name: automatoninc/dynamics
+    version: latest
+    published: '2020-07-09'
+    semver_tag: 0.4.0
+    source: https://github.com/run-crank/cog-dynamics
+    pull_count: 182634
+  - name: automatoninc/pardot
+    version: latest
+    published: '2020-07-08'
+    semver_tag: 0.5.0
+    source: https://github.com/run-crank/cog-pardot
+    pull_count: 210317
+  - name: automatoninc/iterable
+    version: latest
+    published: '2020-07-09'
+    semver_tag: 0.3.0
+    source: https://github.com/run-crank/cog-iterable
+    pull_count: 214222
+  - name: automatoninc/on24
+    version: latest
+    published: '2020-07-08'
+    semver_tag: 0.2.0
+    source: https://github.com/run-crank/cog-on24
+    pull_count: 253958
+  - name: automatoninc/drift
+    version: null
+    published: null
+    source: https://github.com/run-crank/cog-drift
+    pull_count: 208694
+    note: no `latest` tag; 37 rolling dev-* tags only
+  - name: automatoninc/outreach
+    version: null
+    published: null
+    source: https://github.com/run-crank/cog-outreach
+    pull_count: 221225
+    note: no `latest` tag; 42 rolling dev-* tags only
+  - name: automatoninc/goto-webinar
+    version: null
+    published: null
+    source: https://github.com/run-crank/cog-goto-webinar
+    pull_count: 220468
+    note: no `latest` tag; 13 rolling dev-* tags only
+  - name: automatoninc/web-selenium
+    version: null
+    published: null
+    source: https://github.com/run-crank/cog-web-selenium
+    pull_count: 217712
+    note: no `latest` tag; 30 rolling dev-* tags only
+  - name: automatoninc/leandata
+    version: null
+    published: null
+    source: https://github.com/run-crank/cog-leandata
+    pull_count: 251
+    note: no `latest` tag; 5 rolling dev-* tags only
+  - name: automatoninc/okta
+    version: null
+    published: null
+    pull_count: 107
+    note: no `latest` tag; a single dev-v4 tag
+  - name: automatoninc/workato
+    version: null
+    published: null
+    source: https://github.com/run-crank/cog-workato
+    pull_count: 0
+    note: repository published with zero tags and zero pulls
+unpublished_source_only:
+- repo: https://github.com/run-crank/cog-openai
+  note: OpenAI Cog - source on GitHub (2024-09-16), no public Docker image found
+- repo: https://github.com/run-crank/cog-anthropic
+  note: Anthropic Cog - source on GitHub (2024-04-11), no public Docker image found
+- repo: https://github.com/run-crank/cog-gemini
+  note: Gemini Cog - source on GitHub (2024-04-06), no public Docker image found
+- repo: https://github.com/run-crank/cog-sfmc
+  note: Salesforce Marketing Cloud Cog (2025-05-21), no public Docker image found
+- repo: https://github.com/run-crank/cog-goldcast
+  note: Goldcast Cog (2024-09-16), no public Docker image found
+- repo: https://github.com/run-crank/cog-looksy
+  note: Looksy Cog (2025-05-16), no public Docker image found

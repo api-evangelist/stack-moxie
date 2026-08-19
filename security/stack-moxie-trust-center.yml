@@ -1,17 +1,41 @@
-generated: '2026-07-21'
+generated: '2026-08-14'
 method: searched
 probe: true
 source: https://www.stackmoxie.com/security/
 url: https://www.stackmoxie.com/security/
 certifications:
-- SOC 2 Type II
+- SOC 2
 - ISO 27001
 detail: >-
-  SOC 2 Type II audit completed; ISO 27001 and SOC 2 Type II inherited via Azure
-  hosting. Third-party penetration-test certificates available on request.
+  Stack Moxie states it has completed its own SOC 2 audit and will provide the
+  audit report on request. SOC 2 Type II and ISO 27001 are named as certifications
+  of the Azure platform Stack Moxie hosts on, i.e. inherited rather than held
+  directly. Third-party penetration-test certificates and the incident-response
+  process documentation are also available on request. Microsoft has completed a
+  security review for the Azure Marketplace listing and Salesforce has reviewed
+  the Salesforce AppExchange integration.
+attestations:
+- name: SOC 2
+  held_by: Stack Moxie
+  status: audit completed
+  access: on request
+- name: SOC 2 Type II
+  held_by: Microsoft Azure (hosting platform)
+  status: inherited
+- name: ISO 27001
+  held_by: Microsoft Azure (hosting platform)
+  status: inherited
+- name: Azure Marketplace security review
+  held_by: Microsoft
+  status: completed
+- name: Salesforce AppExchange security review
+  held_by: Salesforce
+  status: completed
 evidence:
 - source: https://www.stackmoxie.com/security/
   keywords:
   - soc 2
   - soc2
   - iso 27001
+  - penetration testing
+  - bug bounty

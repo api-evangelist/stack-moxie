@@ -1,0 +1,41 @@
+generated: '2026-08-14'
+method: generated
+source: >-
+  openapi/stack-moxie-rest-api-openapi.yml, grpc/stack-moxie-cog.proto,
+  cli/stack-moxie-cli.yml, https://api.stackmoxie.com/,
+  https://github.com/run-crank/cli/blob/master/README.md
+note: >-
+  Stack Moxie ships two distinct interfaces and the skills are split accordingly:
+  the hosted REST API (OpenAPI 3.0.1, base https://app.stackmoxie.com/api/) and the
+  open-source Cog gRPC contract driven by the crank CLI. Every path, method,
+  schema field, enum value, RPC name and CLI command referenced in these skills was
+  read from those two contracts; nothing is invented. The REST spec declares no
+  operationIds, so REST operations are addressed by method + path.
+skills:
+- file: stack-moxie-run-a-scenario-via-rest-api.md
+  name: Run and monitor a Stack Moxie test scenario over the REST API
+  api: openapi/stack-moxie-rest-api-openapi.yml
+  surface: rest
+  operations:
+  - 'GET /v1/organizations/{org}/registry'
+  - 'POST /v1/organizations/{org}/connections'
+  - 'POST /v1/organizations/{org}/scenarios'
+  - 'POST /v1/organizations/{org}/scenarios/{id}/runs'
+  - 'POST /v1/organizations/{org}/asyncScenario'
+  - 'GET /v1/organizations/{org}/job/{jobId}'
+  - 'GET /v1/organizations/{org}/scenarios/{scenarioId}/runs/{id}'
+  - 'GET /v1/organizations/{org}/scenarios/{scenarioId}/mostRecentRun'
+  - 'GET /v1/organizations/{org}/scenarios/{scenarioId}/runs/{runId}/log/{id}'
+  - 'POST /v1/organizations/{org}/schedules'
+- file: stack-moxie-run-a-crank-scenario.md
+  name: Run a Crank scenario against a SaaS stack
+  api: grpc/stack-moxie-cog.proto
+  surface: grpc-local
+  operations: [GetManifest, RunStep, RunSteps]
+  commands: ["crank cog:install", "crank cog:auth", "crank registry:steps", "crank cog:step", "crank run"]
+- file: stack-moxie-build-a-cog.md
+  name: Build a Crank Cog for a new platform
+  api: grpc/stack-moxie-cog.proto
+  surface: grpc-local
+  operations: [GetManifest, RunStep, RunSteps]
+  commands: ["crank cog:scaffold", "crank cog:install --source=local", "crank cog:step", "crank cog:readme"]

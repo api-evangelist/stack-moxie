@@ -1,0 +1,87 @@
+generated: '2026-08-14'
+method: searched
+source: openapi/stack-moxie-rest-api-openapi.yml
+docs: https://api.stackmoxie.com/#section/Authentication
+note: >-
+  Two separate authentication models exist and they are easy to confuse. The
+  hosted Stack Moxie REST API uses HTTP Bearer with a JWT you manage on your
+  account settings page, applied globally to all 43 operations. The open-source
+  Cog gRPC contract uses per-Cog credentials passed as gRPC call metadata, and
+  those credentials authenticate a Cog to the THIRD-PARTY SYSTEM UNDER TEST, not
+  to Stack Moxie. Both are captured below.
+summary:
+  types:
+  - http
+  - grpc-metadata
+  - saml
+  api_key_in: []
+  oauth2_flows: []
+  public_api: true
+schemes:
+- name: jwtBearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  applies_to: Stack Moxie REST API (all operations)
+  sources:
+  - openapi/stack-moxie-rest-api-openapi.yml
+  security_applied: global
+  security_applied_detail: >-
+    Declared once at the document root as `security: [{jwtBearerAuth: []}]`, so
+    every operation inherits it; no operation opts out and there is no anonymous
+    endpoint.
+  token_management: >-
+    "You can manage your API tokens on your account settings page" - tokens are
+    issued and revoked in the app UI at https://app.stackmoxie.com; there is no
+    token, refresh or introspection endpoint in the API itself.
+  header: 'Authorization: Bearer <jwt>'
+  scoped: false
+  scope_model: >-
+    Authorization is organization-scoped by path, not by token scope - every
+    operation is nested under /v1/organizations/{org} where {org} is the
+    Organization UUID. Two distinct failure responses distinguish the cases:
+    401 Unauthorized ("there may be a problem with your API token") and
+    403 Forbidden ("the authenticated user isn't allowed to perform this action").
+  expiry: not documented
+  rotation: not documented
+- name: CogAuthFields
+  type: grpc-metadata
+  protocol: gRPC (proto3), automaton.cog.CogService
+  applies_to: Crank Cogs (open-source, self-run)
+  sources:
+  - grpc/stack-moxie-cog.proto
+  description: >-
+    Each Cog self-declares the credentials it needs by returning a
+    CogManifest.auth_fields list (repeated FieldDefinition) from the GetManifest
+    RPC. Every FieldDefinition carries a key, a type (STRING, BOOLEAN, NUMERIC,
+    DATE, DATETIME, EMAIL, PHONE, URL, MAP, ANYSCALAR, ANYNONSCALAR), an
+    optionality (OPTIONAL | REQUIRED), and help text. The client (crank) collects
+    those values and sets each as gRPC call metadata, keyed by the FieldDefinition
+    key, on every RunStep / RunSteps call.
+  discovery_operation: GetManifest
+  credential_carrier: gRPC call metadata
+  field_key_example: mySystemAuthToken
+  help_url_field: CogManifest.auth_help_url
+  hosted_equivalent: >-
+    In the hosted product the same credentials are stored as a Connection
+    (POST /v1/organizations/{org}/connections) whose write-only `auth` object
+    holds the Cog's auth fields and whose `isValid` flag reports whether they
+    still work. The Cog registry those fields belong to is readable at
+    GET /v1/organizations/{org}/registry, which returns RegistryEntry objects
+    carrying authFieldsList and authHelpUrl - the REST projection of CogManifest.
+- name: Hosted app SSO
+  type: saml
+  applies_to: Stack Moxie web application (human login, not API)
+  source: https://www.stackmoxie.com/pricing/
+  plans:
+    Starter: none
+    Individual: none
+    Growth: SSO (SAML)
+    Enterprise: SSO (Federated or SAML)
+gaps:
+- no OAuth 2.0 or OpenID Connect surface; /.well-known/oauth-authorization-server
+  and /.well-known/openid-configuration return 404 on every host
+- no token endpoint, no refresh flow, no introspection or revocation endpoint in
+  the API - token lifecycle is entirely a UI operation
+- no documented token expiry or rotation policy
+- no scopes; authorization is coarse, by organization membership and role
