@@ -12,6 +12,18 @@ description: >-
   a no-code BDD test runner - with its ecosystem of gRPC "Cog" plugins for
   Salesforce, Marketo, Pardot, Eloqua, HubSpot, Dynamics, OpenAI, web, inbox,
   DNS and more.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: public
   onboarding: self-service
