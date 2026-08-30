@@ -1,0 +1,291 @@
+openapi: 3.2.0
+info:
+  description: 'Stack Moxie is a QA Automation platform for Marketing, Sales, and Enterprise
+
+    Business technologists.
+
+
+    This REST API can be used by developers like you to further automate, extend,
+
+    and integrate quality into the workflows that matter most to you.
+
+
+    Don''t have an account? [Sign up here](https://app.stackmoxie.com).
+
+
+    # Authentication
+
+
+    The Stack Moxie REST API uses HTTP Bearer Authentication, in the form of a
+
+    JWT token, across all endpoints for authentication. You can manage your API
+
+    tokens on your account settings page.
+
+
+    <SecurityDefinitions />
+
+    '
+  title: 'Stack Moxie REST How To: Organize API'
+  x-logo:
+    url: https://app.stackmoxie.com/api/logo.png
+    altText": Stack Moxie Logo
+servers:
+- url: https://app.stackmoxie.com/api/
+security:
+- jwtBearerAuth: []
+tags:
+- name: 'How To: Organize'
+  description: 'Use these calls to organize your test Scenarios into Folders.
+
+    '
+paths:
+  /v1/organizations/{org}/folders:
+    get:
+      summary: List Folders
+      description: 'Retrieves a list of this Organization''s Folders.
+
+        '
+      tags:
+      - 'How To: Organize'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      responses:
+        '200':
+          description: Returns a list of the Organization's Folders.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Folder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Create a Folder
+      description: 'Creates a Folder.
+
+        '
+      tags:
+      - 'How To: Organize'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Folder'
+      responses:
+        '200':
+          description: Returns the Folder just created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/organizations/{org}/folders/{id}:
+    get:
+      summary: Get a Folder
+      description: 'Retrieves an individual Folder by ID.
+
+        '
+      tags:
+      - 'How To: Organize'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Folder's ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns the Folder.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      summary: Update a Folder
+      description: 'Updates an individual Folder by ID.
+
+        '
+      tags:
+      - 'How To: Organize'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Folder's ID.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Folder'
+      responses:
+        '200':
+          description: Returns the updated Folder.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    delete:
+      summary: Delete a Folder
+      tags:
+      - 'How To: Organize'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Folder's ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Folder successfully deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
+      type: object
+      properties:
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
+    Folder:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Folder Name
+        description:
+          type: string
+          description: Brief description of the Folder's purpose or intention.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Folder in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Folder.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who created this Folder.
+        lastUpdatedBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who last updated this Folder.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Folder's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Folder was last updated.
+  securitySchemes:
+    jwtBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

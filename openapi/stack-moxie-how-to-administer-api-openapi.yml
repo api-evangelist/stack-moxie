@@ -1,0 +1,571 @@
+openapi: 3.2.0
+info:
+  description: 'Stack Moxie is a QA Automation platform for Marketing, Sales, and Enterprise
+
+    Business technologists.
+
+
+    This REST API can be used by developers like you to further automate, extend,
+
+    and integrate quality into the workflows that matter most to you.
+
+
+    Don''t have an account? [Sign up here](https://app.stackmoxie.com).
+
+
+    # Authentication
+
+
+    The Stack Moxie REST API uses HTTP Bearer Authentication, in the form of a
+
+    JWT token, across all endpoints for authentication. You can manage your API
+
+    tokens on your account settings page.
+
+
+    <SecurityDefinitions />
+
+    '
+  title: 'Stack Moxie REST How To: Administer API'
+  x-logo:
+    url: https://app.stackmoxie.com/api/logo.png
+    altText": Stack Moxie Logo
+servers:
+- url: https://app.stackmoxie.com/api/
+security:
+- jwtBearerAuth: []
+tags:
+- name: 'How To: Administer'
+  description: 'Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically grant them (or your own team members) access.
+
+    '
+paths:
+  /v1/organizations:
+    post:
+      summary: Create an Organization
+      description: 'Creates an Organization under which Credentials, Scenarios, Schedules, and Runs can be created. The user making the call becomes the admin member of this organization.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+      tags:
+      - 'How To: Administer'
+      responses:
+        '200':
+          description: Returns the Organization just created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: 'Returned if the currently authenticated user has exceeded the maximum number of trial organizations.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/organizations/{org}:
+    patch:
+      summary: Update an Organization
+      description: 'Updates a given Organization and its details.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The Organization's name.
+                statusPageIsPublic:
+                  type: boolean
+                  description: Whether or not the Organization's status dashboard can be viewed by unauthenticated users.
+                notificationEmailAddress:
+                  type: string
+                  format: email
+                  description: The email address (most likely a group alias) where Run notifcations should be sent for Scheduled runs.
+                notificationSetting:
+                  type: string
+                  enum:
+                  - never
+                  - change
+                  - every fail
+                  - every error
+                  - every run
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      responses:
+        '200':
+          description: Returns the updated Organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/organizations/{org}/members:
+    get:
+      summary: List Team Members
+      description: 'Retrieves the list of team members who have access to the given Organization.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      responses:
+        '200':
+          description: Returns the list of team members in this Organization.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationMember'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Invite a Team Member
+      description: 'Invites a given person to join the Organization.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                role:
+                  type: string
+                  enum:
+                  - org-admin
+                  - org-creator
+      responses:
+        '200':
+          description: Returns the team membership just created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/organizations/{org}/members/{id}:
+    get:
+      summary: Get a Team Member
+      description: 'Retrieves an individual team membership by ID.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Numeric team membership ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns the team membership.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      summary: Update a team Member
+      description: 'Updates an individual team membership by ID.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Numeric team membership ID.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationMember'
+      responses:
+        '200':
+          description: Returns the updated team membership.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    delete:
+      summary: Remove a Team Member
+      description: 'Removes the team member from the organization.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Numeric team membership ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Team member was successfully removed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/organizations/{org}/members/{id}/reinvite:
+    post:
+      summary: Re-Send Invitation
+      description: 'Re-sends the invitation to the given team member.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Numeric team membership ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Invitation successfully re-sent.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: 'Invalid Action: can''t re-send an invitation to a User who has already activated.
+
+            '
+          content: {}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/organizations/{org}/notification-groups:
+    post:
+      summary: Create a Notification Group
+      description: 'Creates a Notification Group.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationGroup'
+      responses:
+        '200':
+          description: Returns the Notification Group just created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationGroup'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/organizations/{org}/notification-groups/{id}:
+    patch:
+      summary: Update a Notification Group
+      description: 'Updates a Notification Group.
+
+        '
+      tags:
+      - 'How To: Administer'
+      parameters:
+      - $ref: '#/components/parameters/OrgPathParam'
+      - name: id
+        in: path
+        description: Notification Group's ID.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationGroup'
+      responses:
+        '200':
+          description: Returns the Notification Group just updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationGroup'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    OrganizationMember:
+      description: A representation of the relationship between a User and an Organization, including the User's role in the organization.
+      required:
+      - role
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - org-admin
+          - org-creator
+          description: The role this team member has in the Organization.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Membership
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this membership in the form of a UUID.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this team membership's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this team membership was last modified.
+        member:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object for the teammate this membership represents.
+        organization:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Organization'
+          description: The ID or Organization object this membership relates to.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this membership.
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
+      type: object
+      properties:
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
+    Organization:
+      description: Represents a company, client, or environment under which Credentials, Scenarios, Runs, and Folders are scoped.
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: The Organization's name.
+        statusPageIsPublic:
+          type: boolean
+          default: false
+          description: Whether or not the Organization's status dashboard can be viewed by unauthenticated users.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Organization in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Organization.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Organization's creation.
+        plan:
+          type: string
+          readOnly: true
+          description: The subscription-level associated with this Organization.
+        urlSlug:
+          type: string
+          readOnly: true
+          description: URL slug used as part of the Organization's public status page (e.g. https://app.stackmoxie.com/status/{urlSlug}). Only relevant when statusPageIsPublic is set to true.
+        maxRunsPerPeriod:
+          type: integer
+          readOnly: true
+          description: The maximum number of Runs that this Organization is allowed to create in a given month.
+        scheduleIntervalLowerBound:
+          type: integer
+          readOnly: true
+          description: The lower-bound of time (in seconds) that this Organization is allowed to schedule Scenarios.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this Scenario.
+    NotificationGroup:
+      description: Represents a notification group that can be notified during a scenario run.
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Notification Group name.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email alias of the notification group.
+        members:
+          description: The users that are members of this notification group.
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            $ref: '#/components/schemas/User'
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Notification Group.
+        uuid:
+          type: string
+          readOnly: true
+          description: An identifier for this Notification Group in the form of a UUID.
+        createdAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of this Notification Group's creation.
+        updatedAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of when this Notification Group was last modified.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this Notification Group.
+  securitySchemes:
+    jwtBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
