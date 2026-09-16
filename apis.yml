@@ -1,17 +1,13 @@
 aid: stack-moxie
 name: Stack Moxie
-description: >-
-  Stack Moxie is a revenue-observability platform that provides continuous
-  testing and monitoring for AI, marketing, and RevOps technology stacks. It
-  watches integrated SaaS platforms end-to-end, catches outages, broken
-  automations, and email-deliverability issues before they become revenue
-  incidents, and QAs campaign launches so teams ship error-free. It ships two
-  developer surfaces: a hosted REST API (OpenAPI 3.0.1, 43 operations, JWT bearer
-  auth, base https://app.stackmoxie.com/api/) for creating, running, scheduling
-  and monitoring test Scenarios programmatically; and the open-source Crank CLI -
-  a no-code BDD test runner - with its ecosystem of gRPC "Cog" plugins for
-  Salesforce, Marketo, Pardot, Eloqua, HubSpot, Dynamics, OpenAI, web, inbox,
-  DNS and more.
+description: 'Stack Moxie is a revenue-observability platform that provides continuous testing and monitoring
+  for AI, marketing, and RevOps technology stacks. It watches integrated SaaS platforms end-to-end, catches
+  outages, broken automations, and email-deliverability issues before they become revenue incidents, and
+  QAs campaign launches so teams ship error-free. It ships two developer surfaces: a hosted REST API (OpenAPI
+  3.0.1, 43 operations, JWT bearer auth, base https://app.stackmoxie.com/api/) for creating, running,
+  scheduling and monitoring test Scenarios programmatically; and the open-source Crank CLI - a no-code
+  BDD test runner - with its ecosystem of gRPC "Cog" plugins for Salesforce, Marketo, Pardot, Eloqua,
+  HubSpot, Dynamics, OpenAI, web, inbox, DNS and more.'
 deliveryModel:
   model: saas
   open_source: false
@@ -37,10 +33,8 @@ accessModel:
   - https://api.stackmoxie.com/
   generated: '2026-08-14'
   method: searched
-  note: >-
-    Free-for-life Starter tier (25 runs/month) with self-service signup at
-    app.stackmoxie.com; published price list; publicly readable API reference.
-    Growth and Enterprise tiers require a sales conversation.
+  note: Free-for-life Starter tier (25 runs/month) with self-service signup at app.stackmoxie.com; published
+    price list; publicly readable API reference. Growth and Enterprise tiers require a sales conversation.
 image: https://stackmoxie.com/favicon.ico
 url: https://raw.githubusercontent.com/api-evangelist/stack-moxie/refs/heads/main/apis.yml
 x-type: company
@@ -51,7 +45,7 @@ x-tier: profiled
 x-tier-reason: published-openapi-harvested
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-08-14'
+modified: '2026-09-16'
 tags:
 - Company
 - Revenue Operations
@@ -90,8 +84,7 @@ maintainers:
 apis:
 - aid: stack-moxie:stack-moxie-how-to-administer-api
   name: 'Stack Moxie How To: Administer API'
-  description: >-
-    Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically
+  description: Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically
     grant them (or your own team members) access.
   humanURL: https://api.stackmoxie.com/
   baseURL: https://app.stackmoxie.com/api/
@@ -136,8 +129,8 @@ apis:
     url: rate-limits/stack-moxie-rate-limits.yml
 - aid: stack-moxie:stack-moxie-how-to-integrate-api
   name: 'Stack Moxie How To: Integrate API'
-  description: >-
-    Use these calls to connect an Organization with Marketing/Sales technologies supported by Stack Moxie.
+  description: Use these calls to connect an Organization with Marketing/Sales technologies supported
+    by Stack Moxie.
   humanURL: https://api.stackmoxie.com/
   baseURL: https://app.stackmoxie.com/api/
   tags:
@@ -209,7 +202,7 @@ common:
 - type: APIReference
   url: https://api.stackmoxie.com/
 - type: OpenAPI
-  url: openapi/stack-moxie-rest-api-openapi.yml
+  url: openapi/_original/stack-moxie-rest-api-openapi.yml
 - type: Overlay
   url: overlays/stack-moxie-rest-api-overlay.yaml
 - type: ErrorCatalog
@@ -285,12 +278,9 @@ x-enrichment:
   status: enriched
   artifacts_added: 17
   pass: local-v1
-  note: >-
-    Contract discovery corrected a wrong prior conclusion. The 2026-07-21 pass
-    recorded that Stack Moxie "exposes no public REST API" after conventional spec
-    paths 404d. GET https://api.stackmoxie.com/ in fact returns 200 with a
-    server-rendered ReDoc page whose __redoc_state carries a complete OpenAPI 3.0.1
-    document (25 paths, 43 operations, 17 schemas), saved verbatim to
-    openapi/_original/. Every artifact asserting "no API" was rewritten. Ownership
-    verified: info.title "Stack Moxie REST API", servers
-    https://app.stackmoxie.com/api/, signup link app.stackmoxie.com.
+  note: 'Contract discovery corrected a wrong prior conclusion. The 2026-07-21 pass recorded that Stack
+    Moxie "exposes no public REST API" after conventional spec paths 404d. GET https://api.stackmoxie.com/
+    in fact returns 200 with a server-rendered ReDoc page whose __redoc_state carries a complete OpenAPI
+    3.0.1 document (25 paths, 43 operations, 17 schemas), saved verbatim to openapi/_original/. Every
+    artifact asserting "no API" was rewritten. Ownership verified: info.title "Stack Moxie REST API",
+    servers https://app.stackmoxie.com/api/, signup link app.stackmoxie.com.'
