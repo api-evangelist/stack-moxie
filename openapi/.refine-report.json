@@ -1,0 +1,32 @@
+{
+  "provider": "stack-moxie",
+  "sources": [
+    "_original/stack-moxie-openapi.json"
+  ],
+  "outputs": [
+    "stack-moxie-how-to-administer-api-openapi.yml",
+    "stack-moxie-how-to-automate-api-openapi.yml",
+    "stack-moxie-how-to-integrate-api-openapi.yml",
+    "stack-moxie-how-to-organize-api-openapi.yml",
+    "stack-moxie-how-to-test-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "stack-moxie-openapi.json: info.version missing"
+  ],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "stack-moxie-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/stack-moxie-rest-api-openapi.yml: archived document superseded by a larger archived document",
+    "stack-moxie-how-to-administer-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stack-moxie-how-to-automate-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stack-moxie-how-to-integrate-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stack-moxie-how-to-organize-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stack-moxie-how-to-test-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

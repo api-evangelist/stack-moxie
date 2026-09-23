@@ -10,7 +10,7 @@ info:
     and integrate quality into the workflows that matter most to you.
 
 
-    Don''t have an account? [Sign up here](https://app.stackmoxie.com).
+    Don''t have an account? Sign up here.
 
 
     # Authentication
@@ -20,12 +20,7 @@ info:
 
     JWT token, across all endpoints for authentication. You can manage your API
 
-    tokens on your account settings page.
-
-
-    <SecurityDefinitions />
-
-    '
+    tokens on your account settings page.'
   title: 'Stack Moxie REST How To: Administer API'
   x-logo:
     url: https://app.stackmoxie.com/api/logo.png
@@ -36,16 +31,12 @@ security:
 - jwtBearerAuth: []
 tags:
 - name: 'How To: Administer'
-  description: 'Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically grant them (or your own team members) access.
-
-    '
+  description: Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically grant them (or your own team members) access.
 paths:
   /v1/organizations:
     post:
       summary: Create an Organization
-      description: 'Creates an Organization under which Credentials, Scenarios, Schedules, and Runs can be created. The user making the call becomes the admin member of this organization.
-
-        '
+      description: Creates an Organization under which Credentials, Scenarios, Schedules, and Runs can be created. The user making the call becomes the admin member of this organization.
       requestBody:
         required: true
         content:
@@ -71,12 +62,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: postV1Organizations
+      x-operation-id-source: derived
   /v1/organizations/{org}:
     patch:
       summary: Update an Organization
-      description: 'Updates a given Organization and its details.
-
-        '
+      description: Updates a given Organization and its details.
       requestBody:
         required: true
         content:
@@ -117,12 +108,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: patchV1OrganizationsByOrg
+      x-operation-id-source: derived
   /v1/organizations/{org}/members:
     get:
       summary: List Team Members
-      description: 'Retrieves the list of team members who have access to the given Organization.
-
-        '
+      description: Retrieves the list of team members who have access to the given Organization.
       tags:
       - 'How To: Administer'
       parameters:
@@ -140,11 +131,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgMembers
+      x-operation-id-source: derived
     post:
       summary: Invite a Team Member
-      description: 'Invites a given person to join the Organization.
-
-        '
+      description: Invites a given person to join the Organization.
       tags:
       - 'How To: Administer'
       parameters:
@@ -175,12 +166,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postV1OrganizationsByOrgMembers
+      x-operation-id-source: derived
   /v1/organizations/{org}/members/{id}:
     get:
       summary: Get a Team Member
-      description: 'Retrieves an individual team membership by ID.
-
-        '
+      description: Retrieves an individual team membership by ID.
       tags:
       - 'How To: Administer'
       parameters:
@@ -202,11 +193,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgMembersById
+      x-operation-id-source: derived
     patch:
       summary: Update a team Member
-      description: 'Updates an individual team membership by ID.
-
-        '
+      description: Updates an individual team membership by ID.
       tags:
       - 'How To: Administer'
       parameters:
@@ -234,11 +225,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: patchV1OrganizationsByOrgMembersById
+      x-operation-id-source: derived
     delete:
       summary: Remove a Team Member
-      description: 'Removes the team member from the organization.
-
-        '
+      description: Removes the team member from the organization.
       tags:
       - 'How To: Administer'
       parameters:
@@ -256,12 +247,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: deleteV1OrganizationsByOrgMembersById
+      x-operation-id-source: derived
   /v1/organizations/{org}/members/{id}/reinvite:
     post:
       summary: Re-Send Invitation
-      description: 'Re-sends the invitation to the given team member.
-
-        '
+      description: Re-sends the invitation to the given team member.
       tags:
       - 'How To: Administer'
       parameters:
@@ -288,12 +279,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postV1OrganizationsByOrgMembersByIdReinvite
+      x-operation-id-source: derived
   /v1/organizations/{org}/notification-groups:
     post:
       summary: Create a Notification Group
-      description: 'Creates a Notification Group.
-
-        '
+      description: Creates a Notification Group.
       tags:
       - 'How To: Administer'
       parameters:
@@ -315,12 +306,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postV1OrganizationsByOrgNotificationGroups
+      x-operation-id-source: derived
   /v1/organizations/{org}/notification-groups/{id}:
     patch:
       summary: Update a Notification Group
-      description: 'Updates a Notification Group.
-
-        '
+      description: Updates a Notification Group.
       tags:
       - 'How To: Administer'
       parameters:
@@ -348,88 +339,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: patchV1OrganizationsByOrgNotificationGroupsById
+      x-operation-id-source: derived
 components:
-  parameters:
-    OrgPathParam:
-      name: org
-      in: path
-      description: Organization's UUID (to scope the API call).
-      required: true
-      schema:
-        type: string
-        format: uuid
-  responses:
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    OrganizationMember:
-      description: A representation of the relationship between a User and an Organization, including the User's role in the organization.
-      required:
-      - role
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - org-admin
-          - org-creator
-          description: The role this team member has in the Organization.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Membership
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this membership in the form of a UUID.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this team membership's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this team membership was last modified.
-        member:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object for the teammate this membership represents.
-        organization:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/Organization'
-          description: The ID or Organization object this membership relates to.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this membership.
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
     User:
       required:
       - emailAddress
@@ -564,6 +477,86 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who created this Notification Group.
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    OrganizationMember:
+      description: A representation of the relationship between a User and an Organization, including the User's role in the organization.
+      required:
+      - role
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - org-admin
+          - org-creator
+          description: The role this team member has in the Organization.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Membership
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this membership in the form of a UUID.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this team membership's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this team membership was last modified.
+        member:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object for the teammate this membership represents.
+        organization:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Organization'
+          description: The ID or Organization object this membership relates to.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this membership.
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     jwtBearerAuth:
       type: http

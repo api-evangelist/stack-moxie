@@ -10,7 +10,7 @@ info:
     and integrate quality into the workflows that matter most to you.
 
 
-    Don''t have an account? [Sign up here](https://app.stackmoxie.com).
+    Don''t have an account? Sign up here.
 
 
     # Authentication
@@ -20,12 +20,7 @@ info:
 
     JWT token, across all endpoints for authentication. You can manage your API
 
-    tokens on your account settings page.
-
-
-    <SecurityDefinitions />
-
-    '
+    tokens on your account settings page.'
   title: 'Stack Moxie REST How To: Organize API'
   x-logo:
     url: https://app.stackmoxie.com/api/logo.png
@@ -36,16 +31,12 @@ security:
 - jwtBearerAuth: []
 tags:
 - name: 'How To: Organize'
-  description: 'Use these calls to organize your test Scenarios into Folders.
-
-    '
+  description: Use these calls to organize your test Scenarios into Folders.
 paths:
   /v1/organizations/{org}/folders:
     get:
       summary: List Folders
-      description: 'Retrieves a list of this Organization''s Folders.
-
-        '
+      description: Retrieves a list of this Organization's Folders.
       tags:
       - 'How To: Organize'
       parameters:
@@ -63,11 +54,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgFolders
+      x-operation-id-source: derived
     post:
       summary: Create a Folder
-      description: 'Creates a Folder.
-
-        '
+      description: Creates a Folder.
       tags:
       - 'How To: Organize'
       parameters:
@@ -89,12 +80,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postV1OrganizationsByOrgFolders
+      x-operation-id-source: derived
   /v1/organizations/{org}/folders/{id}:
     get:
       summary: Get a Folder
-      description: 'Retrieves an individual Folder by ID.
-
-        '
+      description: Retrieves an individual Folder by ID.
       tags:
       - 'How To: Organize'
       parameters:
@@ -116,11 +107,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgFoldersById
+      x-operation-id-source: derived
     patch:
       summary: Update a Folder
-      description: 'Updates an individual Folder by ID.
-
-        '
+      description: Updates an individual Folder by ID.
       tags:
       - 'How To: Organize'
       parameters:
@@ -148,6 +139,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: patchV1OrganizationsByOrgFoldersById
+      x-operation-id-source: derived
     delete:
       summary: Delete a Folder
       tags:
@@ -167,41 +160,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: deleteV1OrganizationsByOrgFoldersById
+      x-operation-id-source: derived
 components:
-  parameters:
-    OrgPathParam:
-      name: org
-      in: path
-      description: Organization's UUID (to scope the API call).
-      required: true
-      schema:
-        type: string
-        format: uuid
-  responses:
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
     User:
       required:
       - emailAddress
@@ -244,6 +206,13 @@ components:
           type: string
         lastSeenAt:
           type: string
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
     Folder:
       required:
       - name
@@ -284,6 +253,32 @@ components:
           type: integer
           readOnly: true
           description: Unix timestamp (ms) of when this Folder was last updated.
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     jwtBearerAuth:
       type: http

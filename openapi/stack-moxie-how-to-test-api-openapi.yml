@@ -10,7 +10,7 @@ info:
     and integrate quality into the workflows that matter most to you.
 
 
-    Don''t have an account? [Sign up here](https://app.stackmoxie.com).
+    Don''t have an account? Sign up here.
 
 
     # Authentication
@@ -20,12 +20,7 @@ info:
 
     JWT token, across all endpoints for authentication. You can manage your API
 
-    tokens on your account settings page.
-
-
-    <SecurityDefinitions />
-
-    '
+    tokens on your account settings page.'
   title: 'Stack Moxie REST How To: Test API'
   x-logo:
     url: https://app.stackmoxie.com/api/logo.png
@@ -36,16 +31,12 @@ security:
 - jwtBearerAuth: []
 tags:
 - name: 'How To: Test'
-  description: 'Use these calls to define test Scenarios, Run them, and retrieve their results.
-
-    '
+  description: Use these calls to define test Scenarios, Run them, and retrieve their results.
 paths:
   /v1/organizations/{org}/scenarios:
     get:
       summary: List Scenarios
-      description: 'Retrieve the list of test Scenarios for the given Organization.
-
-        '
+      description: Retrieve the list of test Scenarios for the given Organization.
       tags:
       - 'How To: Test'
       parameters:
@@ -63,11 +54,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenarios
+      x-operation-id-source: derived
     post:
       summary: Create a Scenario
-      description: 'Creates a test Scenario for the given Organization.
-
-        '
+      description: Creates a test Scenario for the given Organization.
       tags:
       - 'How To: Test'
       parameters:
@@ -95,12 +86,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: postV1OrganizationsByOrgScenarios
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/{id}:
     get:
       summary: Get a Scenario
-      description: 'Retrieves an individual test Scenario by ID.
-
-        '
+      description: Retrieves an individual test Scenario by ID.
       tags:
       - 'How To: Test'
       parameters:
@@ -122,11 +113,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosById
+      x-operation-id-source: derived
     patch:
       summary: Update a Scenario
-      description: 'Updates an individual test Scenario by ID.
-
-        '
+      description: Updates an individual test Scenario by ID.
       tags:
       - 'How To: Test'
       parameters:
@@ -160,11 +151,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: patchV1OrganizationsByOrgScenariosById
+      x-operation-id-source: derived
     delete:
       summary: Delete a Scenario
-      description: 'Deletes an individual test scenario by ID.
-
-        '
+      description: Deletes an individual test scenario by ID.
       tags:
       - 'How To: Test'
       parameters:
@@ -182,12 +173,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: deleteV1OrganizationsByOrgScenariosById
+      x-operation-id-source: derived
   /v1/organizations/{org}/asyncScenario:
     post:
       summary: Create an Async Scenario
-      description: 'Creates a Scenario Asynchronously.
-
-        '
+      description: Creates a Scenario Asynchronously.
       tags:
       - 'How To: Test'
       parameters:
@@ -219,12 +210,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postV1OrganizationsByOrgAsyncScenario
+      x-operation-id-source: derived
   /v1/organizations/{org}/job/{jobId}:
     get:
       summary: Get Async Job Status
-      description: 'Retrieves the status of an async job, including the created scenario if finished.
-
-        '
+      description: Retrieves the status of an async job, including the created scenario if finished.
       tags:
       - 'How To: Test'
       parameters:
@@ -247,12 +238,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgJobByJobId
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/allTemplates:
     get:
       summary: List Templates
-      description: 'Retrieve the list of all Template Scenarios for the given Organization.
-
-        '
+      description: Retrieve the list of all Template Scenarios for the given Organization.
       tags:
       - 'How To: Test'
       parameters:
@@ -270,12 +261,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosAllTemplates
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/linkableTemplates:
     get:
       summary: List Linkable Templates
-      description: 'Retrieve the list of all Linkable Template Scenarios for the given Organization.
-
-        '
+      description: Retrieve the list of all Linkable Template Scenarios for the given Organization.
       tags:
       - 'How To: Test'
       parameters:
@@ -293,12 +284,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosLinkableTemplates
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/exposedTemplates:
     get:
       summary: List Exposed Templates
-      description: 'Retrieve the list of all Template Scenarios that are exposed to external APIs.
-
-        '
+      description: Retrieve the list of all Template Scenarios that are exposed to external APIs.
       tags:
       - 'How To: Test'
       parameters:
@@ -316,12 +307,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosExposedTemplates
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/{id}/runs:
     get:
       summary: List Scenario Runs
-      description: 'Retrieves a list of Runs for the given Scenario ID.
-
-        '
+      description: Retrieves a list of Runs for the given Scenario ID.
       tags:
       - 'How To: Test'
       parameters:
@@ -349,11 +340,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosByIdRuns
+      x-operation-id-source: derived
     post:
       summary: Create a Scenario Run
-      description: 'Creates a Run for the given scenario given an optional set of token replacements.
-
-        '
+      description: Creates a Run for the given scenario given an optional set of token replacements.
       tags:
       - 'How To: Test'
       parameters:
@@ -399,12 +390,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postV1OrganizationsByOrgScenariosByIdRuns
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/{scenarioId}/runs/{id}:
     get:
       summary: Get a Scenario Run
-      description: 'Retrieves an individual Run by its ID.
-
-        '
+      description: Retrieves an individual Run by its ID.
       tags:
       - 'How To: Test'
       parameters:
@@ -432,12 +423,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosByScenarioIdRunsById
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/{scenarioId}/mostRecentRun:
     get:
       summary: Get a Scenario's Most Recent Run
-      description: 'Retrieves the most recent Run of the given Scenario.
-
-        '
+      description: Retrieves the most recent Run of the given Scenario.
       tags:
       - 'How To: Test'
       parameters:
@@ -459,12 +450,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosByScenarioIdMostRecentRun
+      x-operation-id-source: derived
   /v1/organizations/{org}/scenarios/{scenarioId}/runs/{runId}/log/{id}:
     get:
       summary: Get a Scenario Run Log
-      description: 'Retrieves an individual Run Log given its ID.
-
-        '
+      description: Retrieves an individual Run Log given its ID.
       tags:
       - 'How To: Test'
       parameters:
@@ -498,62 +489,189 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: getV1OrganizationsByOrgScenariosByScenarioIdRunsByRunIdLogById
+      x-operation-id-source: derived
 components:
   schemas:
-    Run:
-      description: Represents a single run of a Test Scenario.
+    Job:
+      description: The status of the job that is running asynchronously.
       type: object
       properties:
-        outcome:
-          type: string
-          readOnly: true
-          description: The status or outcome of the test.
-          enum:
-          - Created
-          - Running
-          - Passed
-          - Failed
-          - Error
-          - Waiting
-        duration:
+        createdAt:
           type: integer
           readOnly: true
-          description: Duration (in ms) that this run took to complete.
-        scenario:
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/Scenario'
+          description: Unix timestamp (ms) of this Job's creation.
+        updatedAt:
+          type: integer
           readOnly: true
-          description: The ID or Scenario object this Run is associated with.
+          description: Unix timestamp (ms) of this Job's last update.
         id:
-          type: number
+          type: integer
           readOnly: true
-          description: A numeric identifier for this Run.
+          description: A numeric identifier for this Job.
+        jobId:
+          type: string
+          format: uuid
+          description: UUID of the job that is running.
+        status:
+          type: string
+          readOnly: true
+          description: Status of the job.
+          enum:
+          - Processing
+          - Complete
+          - Failed
+        type:
+          type: string
+          readOnnly: true
+          description: The type of async Job.
+          enum:
+          - Scenario
+        data:
+          type: string
+          readOnly: true
+          description: JSON string containing all data from the job.
+    RunLog:
+      description: Represents a detailed log associated with a specific test Scenario Run.
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Run Log.
         uuid:
           type: string
           format: uuid
           readOnly: true
-          description: An identifier for this Run in the form of a UUID.
-        log:
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/RunLog'
-          readOnly: true
-          description: The ID or RunLog object corresponding to this Run.
+          description: An identifier for this Run Log in the form of a UUID.
         createdAt:
-          type: string
+          type: integer
           readOnly: true
-          description: Unix timestamp (ms) of this Run's creation.
+          description: Unix timestamp (ms) of this Run Log's creation.
         updatedAt:
-          type: string
+          type: integer
           readOnly: true
-          description: Unix timestamp (ms) of when this Run was last updated.
+          description: Unix timestamp (ms) of when this Run Log was last modified.
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              outcome:
+                type: string
+                enum:
+                - Passed
+                - Failed
+                - Error
+              message:
+                type: string
+              cog:
+                type: string
+              stepId:
+                type: string
+              stepData:
+                type: object
+          readOnly: true
+    ScenarioDefinition:
+      required:
+      - steps
+      type: object
+      properties:
+        scenario:
+          type: string
+          description: The name of the scenario.
+        description:
+          type: string
+          description: Description of the scenario's purpose.
+        steps:
+          type: array
+          $ref: '#/components/schemas/Steps'
+        linkedScenarios:
+          type: object
+          description: Scenarios that should run based on the outcome of this scenario.
+          $ref: '#/components/schemas/LinkedScenarios'
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
+      type: object
+      properties:
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
+    Folder:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Folder Name
+        description:
+          type: string
+          description: Brief description of the Folder's purpose or intention.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Folder in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Folder.
         createdBy:
+          readOnly: true
           oneOf:
           - type: integer
           - $ref: '#/components/schemas/User'
+          description: The ID or User who created this Folder.
+        lastUpdatedBy:
           readOnly: true
-          description: The ID or User object who created this Run.
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who last updated this Folder.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Folder's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Folder was last updated.
     Scenario:
       required:
       - definition
@@ -646,54 +764,102 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who last updated this Scenario.
-    LinkedScenarioOutcome:
-      description: The scenario that should run based on the outcome of this scenario.
+    Run:
+      description: Represents a single run of a Test Scenario.
       type: object
       properties:
-        templateId:
-          type: integer
-          description: Id of the template scenario that should be run.
-        steps:
-          type: array
-          $ref: '#/components/schemas/Steps'
-    Job:
-      description: The status of the job that is running asynchronously.
-      type: object
-      properties:
-        createdAt:
+        outcome:
+          type: string
+          readOnly: true
+          description: The status or outcome of the test.
+          enum:
+          - Created
+          - Running
+          - Passed
+          - Failed
+          - Error
+          - Waiting
+        duration:
           type: integer
           readOnly: true
-          description: Unix timestamp (ms) of this Job's creation.
-        updatedAt:
-          type: integer
+          description: Duration (in ms) that this run took to complete.
+        scenario:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Scenario'
           readOnly: true
-          description: Unix timestamp (ms) of this Job's last update.
+          description: The ID or Scenario object this Run is associated with.
         id:
-          type: integer
+          type: number
           readOnly: true
-          description: A numeric identifier for this Job.
-        jobId:
+          description: A numeric identifier for this Run.
+        uuid:
           type: string
           format: uuid
-          description: UUID of the job that is running.
-        status:
+          readOnly: true
+          description: An identifier for this Run in the form of a UUID.
+        log:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/RunLog'
+          readOnly: true
+          description: The ID or RunLog object corresponding to this Run.
+        createdAt:
           type: string
           readOnly: true
-          description: Status of the job.
-          enum:
-          - Processing
-          - Complete
-          - Failed
-        type:
-          type: string
-          readOnnly: true
-          description: The type of async Job.
-          enum:
-          - Scenario
-        data:
+          description: Unix timestamp (ms) of this Run's creation.
+        updatedAt:
           type: string
           readOnly: true
-          description: JSON string containing all data from the job.
+          description: Unix timestamp (ms) of when this Run was last updated.
+        createdBy:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+          description: The ID or User object who created this Run.
+    Steps:
+      type: array
+      items:
+        type: object
+        required:
+        - cog
+        - stepId
+        properties:
+          cog:
+            type: string
+            description: The name of the Cog (e.g. vendor/cog-name)
+          stepId:
+            type: string
+            description: The ID of the step to be executed.
+          name:
+            type: string
+            description: The human-readable name of the step.
+          data:
+            type: object
+            description: Data to be supplied to the step during step execution.
+          waitFor:
+            type: integer
+            default: 0
+            description: The amount of time (in seconds) to wait before executing the step.
+          failAfter:
+            type: integer
+            default: 0
+            description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
+    LinkedScenarios:
+      description: Scenarios that should run based on the outcome of this scenario.
+      properties:
+        onPass:
+          $ref: '#/components/schemas/LinkedScenarioOutcome'
+        onFail:
+          $ref: '#/components/schemas/LinkedScenarioOutcome'
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
     NotificationGroup:
       description: Represents a notification group that can be notified during a scenario run.
       required:
@@ -738,189 +904,16 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who created this Notification Group.
-    LinkedScenarios:
-      description: Scenarios that should run based on the outcome of this scenario.
-      properties:
-        onPass:
-          $ref: '#/components/schemas/LinkedScenarioOutcome'
-        onFail:
-          $ref: '#/components/schemas/LinkedScenarioOutcome'
-    RunLog:
-      description: Represents a detailed log associated with a specific test Scenario Run.
+    LinkedScenarioOutcome:
+      description: The scenario that should run based on the outcome of this scenario.
       type: object
       properties:
-        id:
+        templateId:
           type: integer
-          readOnly: true
-          description: A numeric identifier for this Run Log.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Run Log in the form of a UUID.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Run Log's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Run Log was last modified.
-        body:
-          type: array
-          items:
-            type: object
-            properties:
-              outcome:
-                type: string
-                enum:
-                - Passed
-                - Failed
-                - Error
-              message:
-                type: string
-              cog:
-                type: string
-              stepId:
-                type: string
-              stepData:
-                type: object
-          readOnly: true
-    Steps:
-      type: array
-      items:
-        type: object
-        required:
-        - cog
-        - stepId
-        properties:
-          cog:
-            type: string
-            description: The name of the Cog (e.g. vendor/cog-name)
-          stepId:
-            type: string
-            description: The ID of the step to be executed.
-          name:
-            type: string
-            description: The human-readable name of the step.
-          data:
-            type: object
-            description: Data to be supplied to the step during step execution.
-          waitFor:
-            type: integer
-            default: 0
-            description: The amount of time (in seconds) to wait before executing the step.
-          failAfter:
-            type: integer
-            default: 0
-            description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
-    User:
-      required:
-      - emailAddress
-      - fullName
-      - password
-      type: object
-      properties:
-        uuid:
-          type: string
-        emailAddress:
-          maxLength: 200
-          type: string
-        emailStatus:
-          type: string
-        emailChangeCandidate:
-          type: string
-        password:
-          type: string
-        fullName:
-          maxLength: 120
-          type: string
-        notificationSetting:
-          type: string
-        notificationOverride:
-          maxLength: 200
-          type: string
-        maxTrials:
-          type: string
-        isSuperAdmin:
-          type: boolean
-        passwordResetToken:
-          type: string
-        passwordResetTokenExpiresAt:
-          type: string
-        emailProofToken:
-          type: string
-        emailProofTokenExpiresAt:
-          type: string
-        tosAcceptedByIp:
-          type: string
-        lastSeenAt:
-          type: string
-    ScenarioDefinition:
-      required:
-      - steps
-      type: object
-      properties:
-        scenario:
-          type: string
-          description: The name of the scenario.
-        description:
-          type: string
-          description: Description of the scenario's purpose.
+          description: Id of the template scenario that should be run.
         steps:
           type: array
           $ref: '#/components/schemas/Steps'
-        linkedScenarios:
-          type: object
-          description: Scenarios that should run based on the outcome of this scenario.
-          $ref: '#/components/schemas/LinkedScenarios'
-    Folder:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Folder Name
-        description:
-          type: string
-          description: Brief description of the Folder's purpose or intention.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Folder in the form of a UUID.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Folder.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who created this Folder.
-        lastUpdatedBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who last updated this Folder.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Folder's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Folder was last updated.
   responses:
     Unauthorized:
       description: 'Returned when there may be a problem with your API token.
@@ -939,12 +932,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   parameters:
-    RanBeforeQueryParam:
-      name: ranBefore
-      in: query
-      description: Used to filter scenario runs that ran before the specified date. e.g. ?ranBefore=1591702698140
-      schema:
-        type: integer
     RanAfterQueryParam:
       name: ranAfter
       in: query
@@ -957,6 +944,18 @@ components:
       description: This helps with pagination and when the limit is known
       schema:
         type: integer
+    RanBeforeQueryParam:
+      name: ranBefore
+      in: query
+      description: Used to filter scenario runs that ran before the specified date. e.g. ?ranBefore=1591702698140
+      schema:
+        type: integer
+    OutcomeQueryParam:
+      name: outcome
+      in: query
+      description: Used for filtering scenario runs by outcome by passing in comma-delimited values. e.g. ?outcome=Passed,Failed
+      schema:
+        type: integer
     OrgPathParam:
       name: org
       in: path
@@ -965,12 +964,6 @@ components:
       schema:
         type: string
         format: uuid
-    OutcomeQueryParam:
-      name: outcome
-      in: query
-      description: Used for filtering scenario runs by outcome by passing in comma-delimited values. e.g. ?outcome=Passed,Failed
-      schema:
-        type: integer
   securitySchemes:
     jwtBearerAuth:
       type: http
