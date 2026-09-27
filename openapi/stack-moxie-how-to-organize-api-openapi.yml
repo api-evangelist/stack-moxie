@@ -206,13 +206,6 @@ components:
           type: string
         lastSeenAt:
           type: string
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
     Folder:
       required:
       - name
@@ -253,6 +246,13 @@ components:
           type: integer
           readOnly: true
           description: Unix timestamp (ms) of when this Folder was last updated.
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
   responses:
     Unauthorized:
       description: 'Returned when there may be a problem with your API token.

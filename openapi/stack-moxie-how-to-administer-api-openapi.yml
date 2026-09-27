@@ -342,49 +342,124 @@ paths:
       operationId: patchV1OrganizationsByOrgNotificationGroupsById
       x-operation-id-source: derived
 components:
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
-    User:
+    NotificationGroup:
+      description: Represents a notification group that can be notified during a scenario run.
       required:
-      - emailAddress
-      - fullName
-      - password
+      - name
       type: object
       properties:
+        name:
+          type: string
+          description: Notification Group name.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email alias of the notification group.
+        members:
+          description: The users that are members of this notification group.
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            $ref: '#/components/schemas/User'
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Notification Group.
         uuid:
           type: string
-        emailAddress:
-          maxLength: 200
+          readOnly: true
+          description: An identifier for this Notification Group in the form of a UUID.
+        createdAt:
           type: string
-        emailStatus:
+          readOnly: true
+          description: Unix timestamp (ms) of this Notification Group's creation.
+        updatedAt:
           type: string
-        emailChangeCandidate:
+          readOnly: true
+          description: Unix timestamp (ms) of when this Notification Group was last modified.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this Notification Group.
+    OrganizationMember:
+      description: A representation of the relationship between a User and an Organization, including the User's role in the organization.
+      required:
+      - role
+      type: object
+      properties:
+        role:
           type: string
-        password:
+          enum:
+          - org-admin
+          - org-creator
+          description: The role this team member has in the Organization.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Membership
+        uuid:
           type: string
-        fullName:
-          maxLength: 120
-          type: string
-        notificationSetting:
-          type: string
-        notificationOverride:
-          maxLength: 200
-          type: string
-        maxTrials:
-          type: string
-        isSuperAdmin:
-          type: boolean
-        passwordResetToken:
-          type: string
-        passwordResetTokenExpiresAt:
-          type: string
-        emailProofToken:
-          type: string
-        emailProofTokenExpiresAt:
-          type: string
-        tosAcceptedByIp:
-          type: string
-        lastSeenAt:
-          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this membership in the form of a UUID.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this team membership's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this team membership was last modified.
+        member:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object for the teammate this membership represents.
+        organization:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Organization'
+          description: The ID or Organization object this membership relates to.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this membership.
     Organization:
       description: Represents a company, client, or environment under which Credentials, Scenarios, Runs, and Folders are scoped.
       required:
@@ -433,50 +508,6 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who created this Scenario.
-    NotificationGroup:
-      description: Represents a notification group that can be notified during a scenario run.
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Notification Group name.
-        email:
-          type:
-          - string
-          - 'null'
-          description: The email alias of the notification group.
-        members:
-          description: The users that are members of this notification group.
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            $ref: '#/components/schemas/User'
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Notification Group.
-        uuid:
-          type: string
-          readOnly: true
-          description: An identifier for this Notification Group in the form of a UUID.
-        createdAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of this Notification Group's creation.
-        updatedAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of when this Notification Group was last modified.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this Notification Group.
     Error:
       type: object
       properties:
@@ -484,79 +515,48 @@ components:
           type: string
         message:
           type: string
-    OrganizationMember:
-      description: A representation of the relationship between a User and an Organization, including the User's role in the organization.
+    User:
       required:
-      - role
+      - emailAddress
+      - fullName
+      - password
       type: object
       properties:
-        role:
-          type: string
-          enum:
-          - org-admin
-          - org-creator
-          description: The role this team member has in the Organization.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Membership
         uuid:
           type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this membership in the form of a UUID.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this team membership's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this team membership was last modified.
-        member:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object for the teammate this membership represents.
-        organization:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/Organization'
-          description: The ID or Organization object this membership relates to.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this membership.
-  responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    OrgPathParam:
-      name: org
-      in: path
-      description: Organization's UUID (to scope the API call).
-      required: true
-      schema:
-        type: string
-        format: uuid
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
   securitySchemes:
     jwtBearerAuth:
       type: http

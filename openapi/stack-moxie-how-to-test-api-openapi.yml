@@ -492,104 +492,118 @@ paths:
       operationId: getV1OrganizationsByOrgScenariosByScenarioIdRunsByRunIdLogById
       x-operation-id-source: derived
 components:
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Job:
-      description: The status of the job that is running asynchronously.
+    Folder:
+      required:
+      - name
       type: object
       properties:
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Job's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Job's last update.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Job.
-        jobId:
+        name:
           type: string
-          format: uuid
-          description: UUID of the job that is running.
-        status:
+          description: Folder Name
+        description:
           type: string
-          readOnly: true
-          description: Status of the job.
-          enum:
-          - Processing
-          - Complete
-          - Failed
-        type:
-          type: string
-          readOnnly: true
-          description: The type of async Job.
-          enum:
-          - Scenario
-        data:
-          type: string
-          readOnly: true
-          description: JSON string containing all data from the job.
-    RunLog:
-      description: Represents a detailed log associated with a specific test Scenario Run.
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Run Log.
+          description: Brief description of the Folder's purpose or intention.
         uuid:
           type: string
           format: uuid
           readOnly: true
-          description: An identifier for this Run Log in the form of a UUID.
+          description: An identifier for this Folder in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Folder.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who created this Folder.
+        lastUpdatedBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who last updated this Folder.
         createdAt:
           type: integer
           readOnly: true
-          description: Unix timestamp (ms) of this Run Log's creation.
+          description: Unix timestamp (ms) of this Folder's creation.
         updatedAt:
           type: integer
           readOnly: true
-          description: Unix timestamp (ms) of when this Run Log was last modified.
-        body:
-          type: array
-          items:
-            type: object
-            properties:
-              outcome:
-                type: string
-                enum:
-                - Passed
-                - Failed
-                - Error
-              message:
-                type: string
-              cog:
-                type: string
-              stepId:
-                type: string
-              stepData:
-                type: object
-          readOnly: true
-    ScenarioDefinition:
-      required:
-      - steps
+          description: Unix timestamp (ms) of when this Folder was last updated.
+    Run:
+      description: Represents a single run of a Test Scenario.
       type: object
       properties:
+        outcome:
+          type: string
+          readOnly: true
+          description: The status or outcome of the test.
+          enum:
+          - Created
+          - Running
+          - Passed
+          - Failed
+          - Error
+          - Waiting
+        duration:
+          type: integer
+          readOnly: true
+          description: Duration (in ms) that this run took to complete.
         scenario:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Scenario'
+          readOnly: true
+          description: The ID or Scenario object this Run is associated with.
+        id:
+          type: number
+          readOnly: true
+          description: A numeric identifier for this Run.
+        uuid:
           type: string
-          description: The name of the scenario.
-        description:
+          format: uuid
+          readOnly: true
+          description: An identifier for this Run in the form of a UUID.
+        log:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/RunLog'
+          readOnly: true
+          description: The ID or RunLog object corresponding to this Run.
+        createdAt:
           type: string
-          description: Description of the scenario's purpose.
-        steps:
-          type: array
-          $ref: '#/components/schemas/Steps'
-        linkedScenarios:
-          type: object
-          description: Scenarios that should run based on the outcome of this scenario.
-          $ref: '#/components/schemas/LinkedScenarios'
+          readOnly: true
+          description: Unix timestamp (ms) of this Run's creation.
+        updatedAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of when this Run was last updated.
+        createdBy:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+          description: The ID or User object who created this Run.
     User:
       required:
       - emailAddress
@@ -632,46 +646,153 @@ components:
           type: string
         lastSeenAt:
           type: string
-    Folder:
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    LinkedScenarioOutcome:
+      description: The scenario that should run based on the outcome of this scenario.
+      type: object
+      properties:
+        templateId:
+          type: integer
+          description: Id of the template scenario that should be run.
+        steps:
+          type: array
+          $ref: '#/components/schemas/Steps'
+    RunLog:
+      description: Represents a detailed log associated with a specific test Scenario Run.
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Run Log.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Run Log in the form of a UUID.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Run Log's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Run Log was last modified.
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              outcome:
+                type: string
+                enum:
+                - Passed
+                - Failed
+                - Error
+              message:
+                type: string
+              cog:
+                type: string
+              stepId:
+                type: string
+              stepData:
+                type: object
+          readOnly: true
+    LinkedScenarios:
+      description: Scenarios that should run based on the outcome of this scenario.
+      properties:
+        onPass:
+          $ref: '#/components/schemas/LinkedScenarioOutcome'
+        onFail:
+          $ref: '#/components/schemas/LinkedScenarioOutcome'
+    Job:
+      description: The status of the job that is running asynchronously.
+      type: object
+      properties:
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Job's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Job's last update.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Job.
+        jobId:
+          type: string
+          format: uuid
+          description: UUID of the job that is running.
+        status:
+          type: string
+          readOnly: true
+          description: Status of the job.
+          enum:
+          - Processing
+          - Complete
+          - Failed
+        type:
+          type: string
+          readOnnly: true
+          description: The type of async Job.
+          enum:
+          - Scenario
+        data:
+          type: string
+          readOnly: true
+          description: JSON string containing all data from the job.
+    NotificationGroup:
+      description: Represents a notification group that can be notified during a scenario run.
       required:
       - name
       type: object
       properties:
         name:
           type: string
-          description: Folder Name
-        description:
-          type: string
-          description: Brief description of the Folder's purpose or intention.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Folder in the form of a UUID.
+          description: Notification Group name.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email alias of the notification group.
+        members:
+          description: The users that are members of this notification group.
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            $ref: '#/components/schemas/User'
         id:
           type: integer
           readOnly: true
-          description: A numeric identifier for this Folder.
+          description: A numeric identifier for this Notification Group.
+        uuid:
+          type: string
+          readOnly: true
+          description: An identifier for this Notification Group in the form of a UUID.
+        createdAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of this Notification Group's creation.
+        updatedAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of when this Notification Group was last modified.
         createdBy:
           readOnly: true
           oneOf:
           - type: integer
           - $ref: '#/components/schemas/User'
-          description: The ID or User who created this Folder.
-        lastUpdatedBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who last updated this Folder.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Folder's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Folder was last updated.
+          description: The ID or User object who created this Notification Group.
     Scenario:
       required:
       - definition
@@ -764,60 +885,6 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who last updated this Scenario.
-    Run:
-      description: Represents a single run of a Test Scenario.
-      type: object
-      properties:
-        outcome:
-          type: string
-          readOnly: true
-          description: The status or outcome of the test.
-          enum:
-          - Created
-          - Running
-          - Passed
-          - Failed
-          - Error
-          - Waiting
-        duration:
-          type: integer
-          readOnly: true
-          description: Duration (in ms) that this run took to complete.
-        scenario:
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/Scenario'
-          readOnly: true
-          description: The ID or Scenario object this Run is associated with.
-        id:
-          type: number
-          readOnly: true
-          description: A numeric identifier for this Run.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Run in the form of a UUID.
-        log:
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/RunLog'
-          readOnly: true
-          description: The ID or RunLog object corresponding to this Run.
-        createdAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of this Run's creation.
-        updatedAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of when this Run was last updated.
-        createdBy:
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          readOnly: true
-          description: The ID or User object who created this Run.
     Steps:
       type: array
       items:
@@ -846,114 +913,47 @@ components:
             type: integer
             default: 0
             description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
-    LinkedScenarios:
-      description: Scenarios that should run based on the outcome of this scenario.
-      properties:
-        onPass:
-          $ref: '#/components/schemas/LinkedScenarioOutcome'
-        onFail:
-          $ref: '#/components/schemas/LinkedScenarioOutcome'
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
-    NotificationGroup:
-      description: Represents a notification group that can be notified during a scenario run.
+    ScenarioDefinition:
       required:
-      - name
+      - steps
       type: object
       properties:
-        name:
+        scenario:
           type: string
-          description: Notification Group name.
-        email:
-          type:
-          - string
-          - 'null'
-          description: The email alias of the notification group.
-        members:
-          description: The users that are members of this notification group.
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            $ref: '#/components/schemas/User'
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Notification Group.
-        uuid:
+          description: The name of the scenario.
+        description:
           type: string
-          readOnly: true
-          description: An identifier for this Notification Group in the form of a UUID.
-        createdAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of this Notification Group's creation.
-        updatedAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of when this Notification Group was last modified.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this Notification Group.
-    LinkedScenarioOutcome:
-      description: The scenario that should run based on the outcome of this scenario.
-      type: object
-      properties:
-        templateId:
-          type: integer
-          description: Id of the template scenario that should be run.
+          description: Description of the scenario's purpose.
         steps:
           type: array
           $ref: '#/components/schemas/Steps'
-  responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+        linkedScenarios:
+          type: object
+          description: Scenarios that should run based on the outcome of this scenario.
+          $ref: '#/components/schemas/LinkedScenarios'
   parameters:
-    RanAfterQueryParam:
-      name: ranAfter
-      in: query
-      description: Used to filter scenario runs that ran after the specified date. e.g. ?ranAfter=1591702698140
-      schema:
-        type: integer
     PageQueryParam:
       name: page
       in: query
       description: This helps with pagination and when the limit is known
       schema:
         type: integer
-    RanBeforeQueryParam:
-      name: ranBefore
-      in: query
-      description: Used to filter scenario runs that ran before the specified date. e.g. ?ranBefore=1591702698140
-      schema:
-        type: integer
     OutcomeQueryParam:
       name: outcome
       in: query
       description: Used for filtering scenario runs by outcome by passing in comma-delimited values. e.g. ?outcome=Passed,Failed
+      schema:
+        type: integer
+    RanAfterQueryParam:
+      name: ranAfter
+      in: query
+      description: Used to filter scenario runs that ran after the specified date. e.g. ?ranAfter=1591702698140
+      schema:
+        type: integer
+    RanBeforeQueryParam:
+      name: ranBefore
+      in: query
+      description: Used to filter scenario runs that ran before the specified date. e.g. ?ranBefore=1591702698140
       schema:
         type: integer
     OrgPathParam:

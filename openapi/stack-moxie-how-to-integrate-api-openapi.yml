@@ -260,49 +260,54 @@ paths:
       operationId: getV1OrganizationsByOrgRegistry
       x-operation-id-source: derived
 components:
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    User:
-      required:
-      - emailAddress
-      - fullName
-      - password
+    RegistryEntry:
       type: object
       properties:
-        uuid:
+        name:
           type: string
-        emailAddress:
-          maxLength: 200
+          description: The name of the Cog (e.g. `cog-vendor/system-name`)
+        label:
           type: string
-        emailStatus:
+          description: Human-readable name of the system.
+        version:
           type: string
-        emailChangeCandidate:
+          description: Cog Version.
+        homepage:
           type: string
-        password:
+          format: url
+          description: Cog homepage (for reporting bugs).
+        authHelpUrl:
           type: string
-        fullName:
-          maxLength: 120
-          type: string
-        notificationSetting:
-          type: string
-        notificationOverride:
-          maxLength: 200
-          type: string
-        maxTrials:
-          type: string
-        isSuperAdmin:
-          type: boolean
-        passwordResetToken:
-          type: string
-        passwordResetTokenExpiresAt:
-          type: string
-        emailProofToken:
-          type: string
-        emailProofTokenExpiresAt:
-          type: string
-        tosAcceptedByIp:
-          type: string
-        lastSeenAt:
-          type: string
+          format: url
+          description: URL to documentation outlining how to authenticate.
+        stepDefinitionsList:
+          type: array
+          items:
+            type: object
+          description: A list of step definitions (see https://crank.automatoninc.com)
+        authFieldsList:
+          type: array
+          items:
+            type: object
+          description: A list of authentication fields required by this Cog (see https://crank.automatoninc.com)
     Connection:
       description: Represents a connection between Stack Moxie and another platform.
       required:
@@ -357,36 +362,6 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who created this Connection.
-    RegistryEntry:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the Cog (e.g. `cog-vendor/system-name`)
-        label:
-          type: string
-          description: Human-readable name of the system.
-        version:
-          type: string
-          description: Cog Version.
-        homepage:
-          type: string
-          format: url
-          description: Cog homepage (for reporting bugs).
-        authHelpUrl:
-          type: string
-          format: url
-          description: URL to documentation outlining how to authenticate.
-        stepDefinitionsList:
-          type: array
-          items:
-            type: object
-          description: A list of step definitions (see https://crank.automatoninc.com)
-        authFieldsList:
-          type: array
-          items:
-            type: object
-          description: A list of authentication fields required by this Cog (see https://crank.automatoninc.com)
     NotificationGroup:
       description: Represents a notification group that can be notified during a scenario run.
       required:
@@ -438,23 +413,48 @@ components:
           type: string
         message:
           type: string
-  responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
+      type: object
+      properties:
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
   parameters:
     OrgPathParam:
       name: org

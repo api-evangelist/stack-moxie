@@ -164,49 +164,33 @@ paths:
       operationId: deleteV1OrganizationsByOrgSchedulesById
       x-operation-id-source: derived
 components:
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
-    User:
-      required:
-      - emailAddress
-      - fullName
-      - password
-      type: object
-      properties:
-        uuid:
-          type: string
-        emailAddress:
-          maxLength: 200
-          type: string
-        emailStatus:
-          type: string
-        emailChangeCandidate:
-          type: string
-        password:
-          type: string
-        fullName:
-          maxLength: 120
-          type: string
-        notificationSetting:
-          type: string
-        notificationOverride:
-          maxLength: 200
-          type: string
-        maxTrials:
-          type: string
-        isSuperAdmin:
-          type: boolean
-        passwordResetToken:
-          type: string
-        passwordResetTokenExpiresAt:
-          type: string
-        emailProofToken:
-          type: string
-        emailProofTokenExpiresAt:
-          type: string
-        tosAcceptedByIp:
-          type: string
-        lastSeenAt:
-          type: string
     Folder:
       required:
       - name
@@ -247,24 +231,6 @@ components:
           type: integer
           readOnly: true
           description: Unix timestamp (ms) of when this Folder was last updated.
-    ScenarioDefinition:
-      required:
-      - steps
-      type: object
-      properties:
-        scenario:
-          type: string
-          description: The name of the scenario.
-        description:
-          type: string
-          description: Description of the scenario's purpose.
-        steps:
-          type: array
-          $ref: '#/components/schemas/Steps'
-        linkedScenarios:
-          type: object
-          description: Scenarios that should run based on the outcome of this scenario.
-          $ref: '#/components/schemas/LinkedScenarios'
     NotificationGroup:
       description: Represents a notification group that can be notified during a scenario run.
       required:
@@ -309,96 +275,6 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who created this Notification Group.
-    Schedule:
-      description: Represents a Schedule on which an associated Scenario will be run.
-      required:
-      - interval
-      - scheduledModel
-      - scheduledScenario
-      type: object
-      properties:
-        interval:
-          type: integer
-          description: Frequency (in seconds) at which this Schedule runs.
-        scheduledModel:
-          type: string
-          enum:
-          - scenario
-          description: The type of object to be scheduled. Currently, only Scenarios are supported.
-        scheduledScenario:
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/Scenario'
-          description: If `scheduledModel` is set to Scenario, this is the ID or Scenario object to be run on the given interval.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Schedule in the form of a UUID.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Schedule.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Schedule's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Schedule was last updated.
-        lastRanAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Schedule last ran.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/Scenario'
-          description: The ID or User object who created this schedule.
-    Steps:
-      type: array
-      items:
-        type: object
-        required:
-        - cog
-        - stepId
-        properties:
-          cog:
-            type: string
-            description: The name of the Cog (e.g. vendor/cog-name)
-          stepId:
-            type: string
-            description: The ID of the step to be executed.
-          name:
-            type: string
-            description: The human-readable name of the step.
-          data:
-            type: object
-            description: Data to be supplied to the step during step execution.
-          waitFor:
-            type: integer
-            default: 0
-            description: The amount of time (in seconds) to wait before executing the step.
-          failAfter:
-            type: integer
-            default: 0
-            description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
-    LinkedScenarios:
-      description: Scenarios that should run based on the outcome of this scenario.
-      properties:
-        onPass:
-          $ref: '#/components/schemas/LinkedScenarioOutcome'
-        onFail:
-          $ref: '#/components/schemas/LinkedScenarioOutcome'
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
     LinkedScenarioOutcome:
       description: The scenario that should run based on the outcome of this scenario.
       type: object
@@ -501,32 +377,156 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who last updated this Scenario.
-  responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    OrgPathParam:
-      name: org
-      in: path
-      description: Organization's UUID (to scope the API call).
-      required: true
-      schema:
-        type: string
-        format: uuid
+    LinkedScenarios:
+      description: Scenarios that should run based on the outcome of this scenario.
+      properties:
+        onPass:
+          $ref: '#/components/schemas/LinkedScenarioOutcome'
+        onFail:
+          $ref: '#/components/schemas/LinkedScenarioOutcome'
+    ScenarioDefinition:
+      required:
+      - steps
+      type: object
+      properties:
+        scenario:
+          type: string
+          description: The name of the scenario.
+        description:
+          type: string
+          description: Description of the scenario's purpose.
+        steps:
+          type: array
+          $ref: '#/components/schemas/Steps'
+        linkedScenarios:
+          type: object
+          description: Scenarios that should run based on the outcome of this scenario.
+          $ref: '#/components/schemas/LinkedScenarios'
+    Steps:
+      type: array
+      items:
+        type: object
+        required:
+        - cog
+        - stepId
+        properties:
+          cog:
+            type: string
+            description: The name of the Cog (e.g. vendor/cog-name)
+          stepId:
+            type: string
+            description: The ID of the step to be executed.
+          name:
+            type: string
+            description: The human-readable name of the step.
+          data:
+            type: object
+            description: Data to be supplied to the step during step execution.
+          waitFor:
+            type: integer
+            default: 0
+            description: The amount of time (in seconds) to wait before executing the step.
+          failAfter:
+            type: integer
+            default: 0
+            description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
+      type: object
+      properties:
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
+    Schedule:
+      description: Represents a Schedule on which an associated Scenario will be run.
+      required:
+      - interval
+      - scheduledModel
+      - scheduledScenario
+      type: object
+      properties:
+        interval:
+          type: integer
+          description: Frequency (in seconds) at which this Schedule runs.
+        scheduledModel:
+          type: string
+          enum:
+          - scenario
+          description: The type of object to be scheduled. Currently, only Scenarios are supported.
+        scheduledScenario:
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Scenario'
+          description: If `scheduledModel` is set to Scenario, this is the ID or Scenario object to be run on the given interval.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Schedule in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Schedule.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Schedule's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Schedule was last updated.
+        lastRanAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Schedule last ran.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/Scenario'
+          description: The ID or User object who created this schedule.
   securitySchemes:
     jwtBearerAuth:
       type: http
