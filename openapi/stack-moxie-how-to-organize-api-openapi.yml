@@ -206,6 +206,13 @@ components:
           type: string
         lastSeenAt:
           type: string
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
     Folder:
       required:
       - name
@@ -246,24 +253,17 @@ components:
           type: integer
           readOnly: true
           description: Unix timestamp (ms) of when this Folder was last updated.
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
   responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
 
         '
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
 
         '
       content:

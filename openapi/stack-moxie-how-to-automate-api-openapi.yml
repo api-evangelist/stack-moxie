@@ -164,127 +164,77 @@ paths:
       operationId: deleteV1OrganizationsByOrgSchedulesById
       x-operation-id-source: derived
 components:
-  responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    OrgPathParam:
-      name: org
-      in: path
-      description: Organization's UUID (to scope the API call).
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
-    Folder:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Folder Name
-        description:
-          type: string
-          description: Brief description of the Folder's purpose or intention.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Folder in the form of a UUID.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Folder.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who created this Folder.
-        lastUpdatedBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who last updated this Folder.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Folder's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Folder was last updated.
-    NotificationGroup:
-      description: Represents a notification group that can be notified during a scenario run.
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Notification Group name.
-        email:
-          type:
-          - string
-          - 'null'
-          description: The email alias of the notification group.
-        members:
-          description: The users that are members of this notification group.
-          type:
-          - array
-          - 'null'
-          items:
+    Steps:
+      type: array
+      items:
+        type: object
+        required:
+        - cog
+        - stepId
+        properties:
+          cog:
+            type: string
+            description: The name of the Cog (e.g. vendor/cog-name)
+          stepId:
+            type: string
+            description: The ID of the step to be executed.
+          name:
+            type: string
+            description: The human-readable name of the step.
+          data:
             type: object
-            $ref: '#/components/schemas/User'
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Notification Group.
-        uuid:
-          type: string
-          readOnly: true
-          description: An identifier for this Notification Group in the form of a UUID.
-        createdAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of this Notification Group's creation.
-        updatedAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of when this Notification Group was last modified.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this Notification Group.
-    LinkedScenarioOutcome:
-      description: The scenario that should run based on the outcome of this scenario.
+            description: Data to be supplied to the step during step execution.
+          waitFor:
+            type: integer
+            default: 0
+            description: The amount of time (in seconds) to wait before executing the step.
+          failAfter:
+            type: integer
+            default: 0
+            description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
       type: object
       properties:
-        templateId:
-          type: integer
-          description: Id of the template scenario that should be run.
-        steps:
-          type: array
-          $ref: '#/components/schemas/Steps'
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
     Scenario:
       required:
       - definition
@@ -384,6 +334,67 @@ components:
           $ref: '#/components/schemas/LinkedScenarioOutcome'
         onFail:
           $ref: '#/components/schemas/LinkedScenarioOutcome'
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    NotificationGroup:
+      description: Represents a notification group that can be notified during a scenario run.
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Notification Group name.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email alias of the notification group.
+        members:
+          description: The users that are members of this notification group.
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            $ref: '#/components/schemas/User'
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Notification Group.
+        uuid:
+          type: string
+          readOnly: true
+          description: An identifier for this Notification Group in the form of a UUID.
+        createdAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of this Notification Group's creation.
+        updatedAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of when this Notification Group was last modified.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this Notification Group.
+    LinkedScenarioOutcome:
+      description: The scenario that should run based on the outcome of this scenario.
+      type: object
+      properties:
+        templateId:
+          type: integer
+          description: Id of the template scenario that should be run.
+        steps:
+          type: array
+          $ref: '#/components/schemas/Steps'
     ScenarioDefinition:
       required:
       - steps
@@ -402,83 +413,46 @@ components:
           type: object
           description: Scenarios that should run based on the outcome of this scenario.
           $ref: '#/components/schemas/LinkedScenarios'
-    Steps:
-      type: array
-      items:
-        type: object
-        required:
-        - cog
-        - stepId
-        properties:
-          cog:
-            type: string
-            description: The name of the Cog (e.g. vendor/cog-name)
-          stepId:
-            type: string
-            description: The ID of the step to be executed.
-          name:
-            type: string
-            description: The human-readable name of the step.
-          data:
-            type: object
-            description: Data to be supplied to the step during step execution.
-          waitFor:
-            type: integer
-            default: 0
-            description: The amount of time (in seconds) to wait before executing the step.
-          failAfter:
-            type: integer
-            default: 0
-            description: The amount of time (in seconds) to retry this step before considering the scenario run to have failed.
-    Error:
+    Folder:
+      required:
+      - name
       type: object
       properties:
         name:
           type: string
-        message:
+          description: Folder Name
+        description:
           type: string
-    User:
-      required:
-      - emailAddress
-      - fullName
-      - password
-      type: object
-      properties:
+          description: Brief description of the Folder's purpose or intention.
         uuid:
           type: string
-        emailAddress:
-          maxLength: 200
-          type: string
-        emailStatus:
-          type: string
-        emailChangeCandidate:
-          type: string
-        password:
-          type: string
-        fullName:
-          maxLength: 120
-          type: string
-        notificationSetting:
-          type: string
-        notificationOverride:
-          maxLength: 200
-          type: string
-        maxTrials:
-          type: string
-        isSuperAdmin:
-          type: boolean
-        passwordResetToken:
-          type: string
-        passwordResetTokenExpiresAt:
-          type: string
-        emailProofToken:
-          type: string
-        emailProofTokenExpiresAt:
-          type: string
-        tosAcceptedByIp:
-          type: string
-        lastSeenAt:
-          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Folder in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Folder.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who created this Folder.
+        lastUpdatedBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who last updated this Folder.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Folder's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Folder was last updated.
     Schedule:
       description: Represents a Schedule on which an associated Scenario will be run.
       required:
@@ -527,6 +501,32 @@ components:
           - type: integer
           - $ref: '#/components/schemas/Scenario'
           description: The ID or User object who created this schedule.
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     jwtBearerAuth:
       type: http

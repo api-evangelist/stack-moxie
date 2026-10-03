@@ -342,33 +342,104 @@ paths:
       operationId: patchV1OrganizationsByOrgNotificationGroupsById
       x-operation-id-source: derived
 components:
-  responses:
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    OrgPathParam:
-      name: org
-      in: path
-      description: Organization's UUID (to scope the API call).
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
+    User:
+      required:
+      - emailAddress
+      - fullName
+      - password
+      type: object
+      properties:
+        uuid:
+          type: string
+        emailAddress:
+          maxLength: 200
+          type: string
+        emailStatus:
+          type: string
+        emailChangeCandidate:
+          type: string
+        password:
+          type: string
+        fullName:
+          maxLength: 120
+          type: string
+        notificationSetting:
+          type: string
+        notificationOverride:
+          maxLength: 200
+          type: string
+        maxTrials:
+          type: string
+        isSuperAdmin:
+          type: boolean
+        passwordResetToken:
+          type: string
+        passwordResetTokenExpiresAt:
+          type: string
+        emailProofToken:
+          type: string
+        emailProofTokenExpiresAt:
+          type: string
+        tosAcceptedByIp:
+          type: string
+        lastSeenAt:
+          type: string
+    Organization:
+      description: Represents a company, client, or environment under which Credentials, Scenarios, Runs, and Folders are scoped.
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: The Organization's name.
+        statusPageIsPublic:
+          type: boolean
+          default: false
+          description: Whether or not the Organization's status dashboard can be viewed by unauthenticated users.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Organization in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Organization.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Organization's creation.
+        plan:
+          type: string
+          readOnly: true
+          description: The subscription-level associated with this Organization.
+        urlSlug:
+          type: string
+          readOnly: true
+          description: URL slug used as part of the Organization's public status page (e.g. https://app.stackmoxie.com/status/{urlSlug}). Only relevant when statusPageIsPublic is set to true.
+        maxRunsPerPeriod:
+          type: integer
+          readOnly: true
+          description: The maximum number of Runs that this Organization is allowed to create in a given month.
+        scheduleIntervalLowerBound:
+          type: integer
+          readOnly: true
+          description: The lower-bound of time (in seconds) that this Organization is allowed to schedule Scenarios.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this Scenario.
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
     NotificationGroup:
       description: Represents a notification group that can be notified during a scenario run.
       required:
@@ -460,103 +531,32 @@ components:
           - type: integer
           - $ref: '#/components/schemas/User'
           description: The ID or User object who created this membership.
-    Organization:
-      description: Represents a company, client, or environment under which Credentials, Scenarios, Runs, and Folders are scoped.
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: The Organization's name.
-        statusPageIsPublic:
-          type: boolean
-          default: false
-          description: Whether or not the Organization's status dashboard can be viewed by unauthenticated users.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Organization in the form of a UUID.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Organization.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Organization's creation.
-        plan:
-          type: string
-          readOnly: true
-          description: The subscription-level associated with this Organization.
-        urlSlug:
-          type: string
-          readOnly: true
-          description: URL slug used as part of the Organization's public status page (e.g. https://app.stackmoxie.com/status/{urlSlug}). Only relevant when statusPageIsPublic is set to true.
-        maxRunsPerPeriod:
-          type: integer
-          readOnly: true
-          description: The maximum number of Runs that this Organization is allowed to create in a given month.
-        scheduleIntervalLowerBound:
-          type: integer
-          readOnly: true
-          description: The lower-bound of time (in seconds) that this Organization is allowed to schedule Scenarios.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this Scenario.
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
-    User:
-      required:
-      - emailAddress
-      - fullName
-      - password
-      type: object
-      properties:
-        uuid:
-          type: string
-        emailAddress:
-          maxLength: 200
-          type: string
-        emailStatus:
-          type: string
-        emailChangeCandidate:
-          type: string
-        password:
-          type: string
-        fullName:
-          maxLength: 120
-          type: string
-        notificationSetting:
-          type: string
-        notificationOverride:
-          maxLength: 200
-          type: string
-        maxTrials:
-          type: string
-        isSuperAdmin:
-          type: boolean
-        passwordResetToken:
-          type: string
-        passwordResetTokenExpiresAt:
-          type: string
-        emailProofToken:
-          type: string
-        emailProofTokenExpiresAt:
-          type: string
-        tosAcceptedByIp:
-          type: string
-        lastSeenAt:
-          type: string
+  parameters:
+    OrgPathParam:
+      name: org
+      in: path
+      description: Organization's UUID (to scope the API call).
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     jwtBearerAuth:
       type: http
