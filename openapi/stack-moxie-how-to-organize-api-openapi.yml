@@ -163,7 +163,71 @@ paths:
       operationId: deleteV1OrganizationsByOrgFoldersById
       x-operation-id-source: derived
 components:
+  responses:
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Folder:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Folder Name
+        description:
+          type: string
+          description: Brief description of the Folder's purpose or intention.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: An identifier for this Folder in the form of a UUID.
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Folder.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who created this Folder.
+        lastUpdatedBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User who last updated this Folder.
+        createdAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of this Folder's creation.
+        updatedAt:
+          type: integer
+          readOnly: true
+          description: Unix timestamp (ms) of when this Folder was last updated.
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
     User:
       required:
       - emailAddress
@@ -206,70 +270,6 @@ components:
           type: string
         lastSeenAt:
           type: string
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
-    Folder:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Folder Name
-        description:
-          type: string
-          description: Brief description of the Folder's purpose or intention.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: An identifier for this Folder in the form of a UUID.
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Folder.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who created this Folder.
-        lastUpdatedBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User who last updated this Folder.
-        createdAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of this Folder's creation.
-        updatedAt:
-          type: integer
-          readOnly: true
-          description: Unix timestamp (ms) of when this Folder was last updated.
-  responses:
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     OrgPathParam:
       name: org
