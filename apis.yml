@@ -195,6 +195,9 @@ apis:
   - type: RateLimits
     url: rate-limits/stack-moxie-rate-limits.yml
 common:
+- type: CapabilityMap
+  url: capabilities/stack-moxie-capability-edges.yml
+  name: Stack Moxie Business Capability Map
 - type: AgenticAccess
   url: agentic-access/stack-moxie-agentic-access.yml
 - type: Authentication

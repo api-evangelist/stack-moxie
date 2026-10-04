@@ -1,0 +1,26 @@
+slug: stack-moxie
+provider: Stack Moxie
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: 'How To: Test'
+  spec_file: stack-moxie-how-to-test-api-openapi.yml
+  capability_id: BC-4200.50
+  capability_id_l1: BC-4200
+  capability_name: Software Quality Engineering
+  confidence: 0.72
+  evidence: 'POST /v1/organizations/{org}/scenarios  Create a Scenario; POST /v1/organizations/{org}/scenarios/{id}/runs  Create
+    a Scenario Run; schemas: Run, RunLog, ScenarioDefinition'
+  reason: Defining test scenarios, templates and executing/retrieving runs on a "QA Automation platform"
+    is automated test suite definition and execution. Mapped to Software Quality Engineering; slight ambiguity
+    because the objects under test are marketing/RevOps stacks rather than the buyer's own software.
