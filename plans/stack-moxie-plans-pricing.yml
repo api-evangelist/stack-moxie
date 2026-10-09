@@ -142,3 +142,39 @@ purchase_channels:
   note: Microsoft completed a security review; free and paid offers available
 - name: Salesforce AppExchange
   note: Salesforce reviewed the integration; free and paid versions contractable
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - hybrid
+  units: []
+  plans:
+  - name: Starter
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Individual
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Growth
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
