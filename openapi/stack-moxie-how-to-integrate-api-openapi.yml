@@ -260,23 +260,6 @@ paths:
       operationId: getV1OrganizationsByOrgRegistry
       x-operation-id-source: derived
 components:
-  responses:
-    Forbidden:
-      description: 'Returned if the authenticated user isn''t allowed to perform this action.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Returned when there may be a problem with your API token.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     RegistryEntry:
       type: object
@@ -308,67 +291,6 @@ components:
           items:
             type: object
           description: A list of authentication fields required by this Cog (see https://crank.automatoninc.com)
-    Connection:
-      description: Represents a connection between Stack Moxie and another platform.
-      required:
-      - cog
-      type: object
-      properties:
-        cog:
-          type: string
-          enum:
-          - automatoninc/dynamics
-          - automatoninc/eloqua
-          - stackmoxie/hubspot
-          - automatoninc/marketo
-          - automatoninc/pardot
-          - automatoninc/salesforce
-          description: 'Cog Name in the form`vendor/name` (see registry).
-
-            '
-        auth:
-          type: object
-          writeOnly: true
-          description: Authentication details required by the given Cog.
-        profile:
-          type: string
-          enum:
-          - default
-          default: default
-          description: Profile name.
-        isValid:
-          type: boolean
-          readOnly: true
-          description: Whether or not the Connection is valid (e.g. authentication details are still up-to-date).
-        id:
-          type: integer
-          readOnly: true
-          description: A numeric identifier for this Connection.
-        uuid:
-          type: string
-          readOnly: true
-          description: An identifier for this Connection in the form of a UUID.
-        createdAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of this Connection's creation.
-        updatedAt:
-          type: string
-          readOnly: true
-          description: Unix timestamp (ms) of when this Connection was last modified.
-        createdBy:
-          readOnly: true
-          oneOf:
-          - type: integer
-          - $ref: '#/components/schemas/User'
-          description: The ID or User object who created this Connection.
-    Error:
-      type: object
-      properties:
-        name:
-          type: string
-        message:
-          type: string
     NotificationGroup:
       description: Represents a notification group that can be notified during a scenario run.
       required:
@@ -455,6 +377,84 @@ components:
           type: string
         lastSeenAt:
           type: string
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    Connection:
+      description: Represents a connection between Stack Moxie and another platform.
+      required:
+      - cog
+      type: object
+      properties:
+        cog:
+          type: string
+          enum:
+          - automatoninc/dynamics
+          - automatoninc/eloqua
+          - stackmoxie/hubspot
+          - automatoninc/marketo
+          - automatoninc/pardot
+          - automatoninc/salesforce
+          description: 'Cog Name in the form`vendor/name` (see registry).
+
+            '
+        auth:
+          type: object
+          writeOnly: true
+          description: Authentication details required by the given Cog.
+        profile:
+          type: string
+          enum:
+          - default
+          default: default
+          description: Profile name.
+        isValid:
+          type: boolean
+          readOnly: true
+          description: Whether or not the Connection is valid (e.g. authentication details are still up-to-date).
+        id:
+          type: integer
+          readOnly: true
+          description: A numeric identifier for this Connection.
+        uuid:
+          type: string
+          readOnly: true
+          description: An identifier for this Connection in the form of a UUID.
+        createdAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of this Connection's creation.
+        updatedAt:
+          type: string
+          readOnly: true
+          description: Unix timestamp (ms) of when this Connection was last modified.
+        createdBy:
+          readOnly: true
+          oneOf:
+          - type: integer
+          - $ref: '#/components/schemas/User'
+          description: The ID or User object who created this Connection.
+  responses:
+    Unauthorized:
+      description: 'Returned when there may be a problem with your API token.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned if the authenticated user isn''t allowed to perform this action.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     OrgPathParam:
       name: org
