@@ -15,3 +15,54 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
+- slug: stack-moxie-salesforce-appexchange-security-review
+  label: Salesforce AppExchange Security Review
+  partner: salesforce
+  partner_name: Salesforce AppExchange Security Review
+  category: AppExchange security-reviewed publisher
+  type: register
+  channel: standard-directory
+  evidence: https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Salesforce AppExchange public listings (listing JSON) under the AgentExchange Security Review requirement
+    standard: Salesforce AppExchange Security Review
+    spec_file: null
+    role: security-reviewed-publisher
+    registered_name: Stack Moxie
+    register_country: null
+    matched_domain: stackmoxie.com
+    matched_by: domain
+    identity_source: the listing's own publisher.website (no lookup)
+    certified_products:
+    - product: Salesforce package (security-reviewed)
+      product_type: force/package
+      certifier: Salesforce (AgentExchange / AppExchange Security Review)
+      listings: 1
+      example_listing: https://appexchange.salesforce.com/appxListingDetail?listingId=a0N4V00000HDqMVUA1
+      latest_approval: '2022-03-03'
+      lapsed: false
+      lapsed_note: the listing JSON prints solution.securityReview.approvalDate on a LIVE public listing; Salesforce
+        publishes no expiry, so no entry is marked lapsed (latest_approval is context)
+    signal_note: certified_products = ONE entry per product type (listing technology) with a printed securityReview.approvalDate,
+      never per listing or version; a listing with no approval date reads nothing; listing counts / versions are
+      context
+    requirement: https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+    detected_by: sweep-salesforce-appexchange.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
+- slug: stack-moxie-salesforce-own
+  label: Salesforce (own)
+  partner: salesforce
+  partner_name: Salesforce (own)
+  category: alerts
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appexchange.salesforce.com/appxListingDetail?listingId=a0N4V00000HDqMVUA1
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
