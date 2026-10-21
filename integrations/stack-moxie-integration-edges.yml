@@ -9,6 +9,7 @@ checked:
 - https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
 - https://slack.com/marketplace
 - salesforce/integrations/salesforce-integration-edges.yml
+- hubspot/integrations/hubspot-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -81,6 +82,23 @@ edges:
   detected: '2026-10-21'
   detected_by: mirror-platform-listings.py
   category: alerts
+- partner_name: HubSpot (own)
+  partner: hubspot
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://ecosystem.hubspot.com/marketplace/listing/stack-moxie-revenue-observability
+  mirror_of: hubspot/integrations/hubspot-integration-edges.yml
+  apps:
+  - Stack Moxie
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: WORKFLOW_AUTOMATION
 source:
 - https://appexchange.salesforce.com/
 - https://api.appexchange.salesforce.com/recommendations/v3/listings?type=apps
