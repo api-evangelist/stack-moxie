@@ -64,6 +64,135 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Stack Moxie is a company surfaced as a portfolio company of techstars and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Stack Moxie is a revenue-observability platform that provides continuous testing and monitoring for AI, marketing, and RevOps technology stacks. It watches integrated SaaS platforms end-to-end, catches outages, broken automations, and email-deliverability issues before they become revenue incidents, and QAs campaign launches so teams ship error-free. It ships two developer surfaces: a hosted REST API (OpenAPI 3.0.1, 43 operations, JWT bearer auth, base https://app.stackmoxie.com/api/) for creating, running, scheduling and monitoring test Scenarios programmatically; and the open-source Crank CLI - a no-code BDD test runner - with its ecosystem of gRPC "Cog" plugins for Salesforce, Marketo, Pardot, Eloqua, HubSpot, Dynamics, OpenAI, web, inbox, DNS and more.
 
-Backed by: techstars — https://stackmoxie.com/
+**Areas:** Company · Revenue Operations · Marketing Operations · Observability · Monitoring · Testing · Test Automation · QA Automation · Marketing Automation · Email Deliverability · Salesforce · Marketo
+
+## Stack Moxie on APIs.io
+
+Everything profiled for Stack Moxie is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/stack-moxie/](https://apis.io/providers/stack-moxie/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [Stack Moxie How To: Administer API](https://apis.io/apis/stack-moxie/stack-moxie-how-to-administer-api/) — Use these calls to provision Organizations (e.g. for your own clients/customers), and automatically grant them (or your own team members) access.
+- [Stack Moxie How To: Automate API](https://apis.io/apis/stack-moxie/stack-moxie-how-to-automate-api/) — Use these calls to Schedule Scenario runs.
+- [Stack Moxie How To: Integrate API](https://apis.io/apis/stack-moxie/stack-moxie-how-to-integrate-api/) — Use these calls to connect an Organization with Marketing/Sales technologies supported by Stack Moxie.
+- [Stack Moxie How To: Organize API](https://apis.io/apis/stack-moxie/stack-moxie-how-to-organize-api/) — Use these calls to organize your test Scenarios into Folders.
+- [Stack Moxie How To: Test API](https://apis.io/apis/stack-moxie/stack-moxie-how-to-test-api/) — Use these calls to define test Scenarios, Run them, and retrieve their results.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [stack-moxie-mcp.yml](https://apis.io/servers/stack-moxie/stack-moxie-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Stack Moxie Agentic Access](https://apis.io/agentic-access/stack-moxie/stack-moxie-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Stack Moxie Rest Api Overlay](https://apis.io/overlays/stack-moxie/stack-moxie-rest-api-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Stack Moxie Authentication](https://apis.io/security/stack-moxie/stack-moxie-authentication/)
+- [Stack Moxie Domain Security](https://apis.io/security/stack-moxie/stack-moxie-domain-security/)
+- [Stack Moxie Trust Center](https://apis.io/security/stack-moxie/stack-moxie-trust-center/)
+- [Stack Moxie Vulnerability Disclosure](https://apis.io/security/stack-moxie/stack-moxie-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Stack Moxie Plans Pricing](https://apis.io/plans/stack-moxie/stack-moxie-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Stack Moxie Rate Limits](https://apis.io/rate-limits/stack-moxie/stack-moxie-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://stackmoxie.com/)
+- [Documentation](https://app.stackmoxie.com/docs)
+- [Getting started](https://crank.run)
+- [API reference](https://api.stackmoxie.com/)
+- [Pricing](https://www.stackmoxie.com/pricing/)
+- [Sign up](https://app.stackmoxie.com)
+- [Support](https://www.stackmoxie.com/support/)
+- [Blog](https://www.stackmoxie.com/blog/)
+- [Security](https://www.stackmoxie.com/security/)
+- [Compliance](https://www.stackmoxie.com/security/)
+- [Terms of service](https://app.stackmoxie.com/docs/terms)
+- [Privacy policy](https://www.stackmoxie.com/privacypolicy/)
+- [GitHub](https://github.com/run-crank)
+- [Status](https://www.stackmoxie.com/app-status/)
+
+## API Evangelist rating
+
+**Kin Score 64.5** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 49.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 44.7 |
+| Developer ergonomics | 73.2 |
+| Access clarity | 92.1 |
+
+**Agent readiness 27.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 35.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/stack-moxie/](https://apis.io/providers/stack-moxie/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Stack Moxie: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/stack-moxie/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
